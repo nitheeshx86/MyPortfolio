@@ -1,6 +1,34 @@
 import React from 'react';
+import FlowingMenu from './FlowingMenu';
 
 const DeepDive = () => {
+  const menuItems = [
+    {
+      link: "#",
+      text: "Technical Skills",
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+      description: "SMILES processing, binding affinity analysis, drug synergy modelling ➜ GROMACS molecular dynamics simulations :: Linux HPC environments ✦ PyRX, PyMOL, ChimeraX, AlphaFold"
+    },
+    {
+      link: "#",
+      text: "Soft Skills",
+      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
+      description: "Data dashboards and client-facing reports // Agile sprint planning and iterative releases ✦ Cross-functional collaboration across full build cycles ➜ Managing ambiguity independently with minimal documentation :: Communicating technical findings clearly to non-technical audiences"
+    },
+    {
+      link: "#",
+      text: "Research Interests",
+      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+      description: "Computational drug discovery ✦ Molecular dynamics simulation // Quantum computing applications in pharma ➜ Intelligent narrowing of large chemical datasets :: Focused on making science faster without losing rigour"
+    },
+    {
+      link: "#",
+      text: "Measurable Outcomes",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
+      description: "5 internal tools shipped (one now outsourced to pharma) ➜ 1 drug candidate cleared wet-lab validation :: 20+ multinational clients (OmniActive) // $120,000 AWS Braket credits ✦ Independent resolution of critical GROMACS query"
+    }
+  ];
+
   return (
     <section id="details" style={{
       position: "relative",
@@ -11,7 +39,8 @@ const DeepDive = () => {
       display: "flex",
       flexDirection: "column",
       marginTop: "0",
-      gap: "12rem"
+      gap: "8rem",
+      overflow: "visible"
     }}>
 
       {/* 01: ORIGIN (Shifted Left) */}
@@ -49,22 +78,17 @@ const DeepDive = () => {
         </div>
       </div>
 
-      {/* 04: KEY OUTCOMES (Centered, Bold Block) */}
-      <div style={{ alignSelf: "center", maxWidth: "700px", textAlign: "center", border: "1px solid rgba(255,255,255,0.05)", padding: "4rem 3rem", position: "relative" }}>
-        <span style={{ fontSize: "80px", fontFamily: "'Times New Roman', serif", opacity: 0.05, position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>04</span>
-        <h3 style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "1.5rem" }}>Tangible Outcomes_</h3>
-        <p style={{ fontSize: "1.4rem", fontFamily: "'Times New Roman', serif", lineHeight: "1.4", fontStyle: "italic" }}>
-          "Built <span style={{ color: 'rgb(255, 214, 1)', fontStyle: 'normal', fontWeight: 600 }}>Drug Explorer</span>—currently scaling in Global Pharma. Co-developed a drug candidate for menopausal hot flashes that cleared wet-lab validation."
-        </p>
+      {/* INTERACTIVE FLOWING MENU (Skill Pillars) */}
+      <div style={{ marginTop: "4rem", width: "100%", alignSelf: "flex-start" }}>
+        <span style={{ fontSize: "11px", opacity: 0.4, textTransform: "uppercase", letterSpacing: "0.5em", marginBottom: "2.5rem", display: "block" }}>The Internship, Unpacked</span>
+        <div style={{ maxWidth: "600px" }}>
+          <FlowingMenu
+            items={menuItems}
+            textColor="rgba(255, 255, 255, 0.7)"
+          />
+        </div>
       </div>
 
-      {/* 05: CLIENTS (Bottom Asymmetry) */}
-      <div style={{ alignSelf: "flex-end", maxWidth: "350px", borderBottom: "1px solid rgba(255,214,1,0.2)", paddingBottom: "1.5rem" }}>
-        <h4 style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "0.8rem", color: "rgb(255, 214, 1)" }}>Client Reach_</h4>
-        <p style={{ opacity: 0.7, fontSize: "12px", lineHeight: "1.6" }}>
-          20+ multinational pharmaceutical entities handled. Delivering dashboards, high-fidelity research reports, and interactive technical roadmaps.
-        </p>
-      </div>
     </section>
   );
 };

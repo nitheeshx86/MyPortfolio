@@ -2,7 +2,7 @@ import React from 'react';
 
 const Projects = () => {
   return (
-    <div style={{ width: "100vw", flexShrink: 0, display: "flex", flexDirection: "column", justifyContent: "center", boxSizing: "border-box" }}>
+    <div style={{ width: "100vw", flexShrink: 0, display: "flex", flexDirection: "column", justifyContent: "center", boxSizing: "border-box", height: "100%" }}>
       {/* Label above heading */}
       <span style={{ fontSize: "12px", opacity: 0.5, textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "1rem" }}> [ Featured Experience ] </span>
 

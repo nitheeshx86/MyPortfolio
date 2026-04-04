@@ -5,6 +5,7 @@ import ThreeLandingText from './components/ThreeLandingText';
 import Lightning from './components/Lightning';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
+import PersonalProjects from './components/PersonalProjects';
 import DeepDive from './components/DeepDive';
 import Photography from './components/Photography';
 import Contact from './components/Contact';
@@ -15,41 +16,71 @@ import pokemonMusic from './assets/pokemon.mp3';
 export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [horizontalProgress, setHorizontalProgress] = useState(0);
+  const [deepDiveHorizProgress, setDeepDiveHorizProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMuted, setIsMuted] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const audioRef = useRef(null);
   const deepDiveRef = useRef(null);
+  const deepDiveEndRef = useRef(0);
+
+  // Dynamically track the bottom of the DeepDive section
+  const updateDeepDiveEnd = () => {
+    if (deepDiveRef.current) {
+      const rect = deepDiveRef.current.getBoundingClientRect();
+      deepDiveEndRef.current = rect.bottom + window.scrollY;
+    }
+  };
 
   // Smooth Progress Logic via Framer Motion
   const { scrollY } = useScroll();
-  const [deepDiveEnd, setDeepDiveEnd] = useState(0);
 
+  // Reactive internship progress: 0 at Research Intern panel entry → 1 at DeepDive end
+  const [deepDiveEndPx, setDeepDiveEndPx] = useState(10000);
+
+  // Update deepDiveEndPx on scroll so useTransform always has fresh bounds
   useEffect(() => {
-    const updateEnd = () => {
+    const unsub = scrollY.on("change", () => {
       if (deepDiveRef.current) {
-        setDeepDiveEnd(deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight);
+        const bottom = deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight;
+        if (Math.abs(bottom - deepDiveEndPx) > 10) setDeepDiveEndPx(bottom);
       }
-    };
-    updateEnd();
-    window.addEventListener('resize', updateEnd);
-    return () => window.removeEventListener('resize', updateEnd);
+    });
+    // Also run once on mount & resize
+    updateDeepDiveEnd();
+    if (deepDiveRef.current) {
+      setDeepDiveEndPx(deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight);
+    }
+    window.addEventListener('resize', () => {
+      if (deepDiveRef.current) {
+        setDeepDiveEndPx(deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight);
+      }
+    });
+    return () => unsub();
   }, []);
+
+  const MEDxAI_START = 2300; // scrollY when Research Intern panel is centered
 
   const rawInternshipProgress = useTransform(
     scrollY,
-    [2300, deepDiveEnd || 10000], 
-    [0, 1]
+    [MEDxAI_START, deepDiveEndPx],
+    [0, 1],
+    { clamp: true }
   );
-  
+
   const smoothInternshipProgress = useSpring(rawInternshipProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 80,
+    damping: 25,
     restDelta: 0.001
   });
 
-  const barOpacity = useTransform(scrollY, [2100, 2300, deepDiveEnd || 10000, (deepDiveEnd || 10000) + 200], [0, 1, 1, 0]);
+  const barOpacity = useTransform(
+    scrollY,
+    [MEDxAI_START - 200, MEDxAI_START, deepDiveEndPx, deepDiveEndPx + 300],
+    [0, 1, 1, 0],
+    { clamp: true }
+  );
 
   const startPortfolio = () => {
     setIsMuted(false);
@@ -71,9 +102,16 @@ export default function App() {
       const p = Math.min(window.scrollY / 800, 1);
       setScrollProgress(p);
 
-      // 2. Horizontal Progress (800px - 5000px)
+      // 2. Horizontal Progress (800px - 3800px)
       const hp = Math.max(0, Math.min((window.scrollY - 800) / 3000, 1));
       setHorizontalProgress(hp);
+
+      // 3. Projects Horizontal — kicks in after DeepDive ends
+      const dEnd = deepDiveRef.current
+        ? deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight
+        : 0;
+      const dhp = dEnd ? Math.max(0, Math.min((window.scrollY - dEnd) / 2400, 1)) : 0;
+      setDeepDiveHorizProgress(dhp);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -110,11 +148,11 @@ export default function App() {
     <div style={{ backgroundColor: '#000', color: '#FFF', position: 'relative' }}>
       {hasStarted && <Loader />}
       <BlobCursor />
-      <audio 
-        ref={audioRef} 
-        src={pokemonMusic} 
-        loop 
-        muted={isMuted} 
+      <audio
+        ref={audioRef}
+        src={pokemonMusic}
+        loop
+        muted={isMuted}
         style={{ display: 'none' }}
       />
 
@@ -134,7 +172,7 @@ export default function App() {
         zIndex: 100,
         pointerEvents: "none"
       }}>
-        <h1 
+        <h1
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
           style={{
@@ -155,22 +193,22 @@ export default function App() {
           }}
         >
           N
-          <div style={{ 
-            display: "flex", 
-            overflow: "hidden", 
-            maxWidth: isLogoHovered ? "400px" : "0", 
-            transition: "max-width 1.2s cubic-bezier(0.16, 1, 0.3, 1)", 
+          <div style={{
+            display: "flex",
+            overflow: "hidden",
+            maxWidth: isLogoHovered ? "400px" : "0",
+            transition: "max-width 1.2s cubic-bezier(0.16, 1, 0.3, 1)",
           }}>
             {"ITHEESH K".split("").map((letter, i) => (
-              <span 
-                key={i} 
-                style={{ 
+              <span
+                key={i}
+                style={{
                   opacity: isLogoHovered ? 1 : 0,
                   transform: isLogoHovered ? "translateX(0)" : "translateX(-15px)",
                   transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
                   transitionDelay: `${i * 0.05}s`,
                   display: "inline-block",
-                  whiteSpace: "pre", 
+                  whiteSpace: "pre",
                 }}
               >
                 {letter}
@@ -204,18 +242,18 @@ export default function App() {
 
       {/* Internship Vertical Progress Bar */}
       <motion.div style={{
-          position: "fixed",
-          left: "64px",
-          top: "120px",
-          bottom: "120px",
-          width: "2px",
-          backgroundColor: "rgba(255, 255, 255, 0.1)",
-          zIndex: 50,
-          pointerEvents: "none",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          opacity: barOpacity
+        position: "fixed",
+        left: "64px",
+        top: "120px",
+        bottom: "120px",
+        width: "2px",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        zIndex: 50,
+        pointerEvents: "none",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        opacity: barOpacity
       }}>
         {/* Label */}
         <div style={{
@@ -249,13 +287,13 @@ export default function App() {
 
       {/* Main Container */}
       <div style={{ width: "100%", position: "relative", cursor: "none", backgroundColor: "#000" }}>
-        
+
         {/* STICKY ORCHESTRATION SEGMENT (Landing -> Horizontal Transition) */}
         <div style={{ height: "5000px", position: "relative", zIndex: 10 }}>
-          
+
           {/* STICKY VIEWPORT WRAPPER */}
           <div style={{ position: "sticky", top: 0, left: 0, width: "100%", height: "100vh", overflow: "hidden" }}>
-            
+
             {/* LANDING SECTION (STICKY Child) */}
             <div style={{
               position: "absolute",
@@ -299,11 +337,11 @@ export default function App() {
                 width: "100%",
                 zIndex: 13
               }}>
-                <ThreeLandingText 
-                  isMuted={isMuted} 
-                  setIsMuted={setIsMuted} 
+                <ThreeLandingText
+                  isMuted={isMuted}
+                  setIsMuted={setIsMuted}
                   hasStarted={hasStarted}
-                  startPortfolio={startPortfolio} 
+                  startPortfolio={startPortfolio}
                 />
                 <Lightning isAudioOn={!isMuted && hasStarted} />
 
@@ -369,9 +407,9 @@ export default function App() {
                         setIsMuted(!isMuted);
                       }
                     }}
-                    style={{ 
-                      height: "80px", 
-                      objectFit: "contain", 
+                    style={{
+                      height: "80px",
+                      objectFit: "contain",
                       imageRendering: "pixelated",
                       cursor: "pointer",
                       pointerEvents: "auto"
@@ -389,7 +427,7 @@ export default function App() {
               position: "absolute",
               inset: 0,
               zIndex: 5,
-              overflow: "hidden", 
+              overflow: "hidden",
               backgroundColor: "#000",
               color: "#FFF",
             }}>
@@ -398,8 +436,8 @@ export default function App() {
                 display: "flex",
                 height: "100%",
                 width: "200vw",
-                transform: `translateX(-${horizontalProgress * 100}vw)`, 
-                transition: "transform 0.05s ease-out", 
+                transform: `translateX(-${horizontalProgress * 100}vw)`,
+                transition: "transform 0.08s ease-out",
                 padding: "clamp(40px, 12vw, 140px)",
                 boxSizing: "border-box",
               }}>
@@ -411,9 +449,51 @@ export default function App() {
           </div>
         </div>
 
+        {/* 2. Deep Dive — normal vertical section */}
         <div ref={deepDiveRef}>
           <DeepDive />
         </div>
+
+        {/* 3. Projects — sticky horizontal scroll (slides in after DeepDive) */}
+        <div style={{ height: "3200px", position: "relative" }}>
+          <div style={{
+            position: "sticky",
+            top: 0,
+            height: "100vh",
+            overflow: "hidden",
+            backgroundColor: "#000",
+          }}>
+            <div style={{
+              display: "flex",
+              width: "200vw",
+              height: "100%",
+              transform: `translateX(-${deepDiveHorizProgress * 100}vw)`,
+              transition: "transform 0.08s ease-out"
+            }}>
+              {/* Left placeholder — mirrors the end of DeepDive for continuity */}
+              <div style={{
+                width: "100vw",
+                flexShrink: 0,
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "rgba(255,255,255,0.15)",
+                fontFamily: "'Times New Roman', serif",
+                fontSize: "clamp(2rem, 8vw, 6rem)",
+                fontStyle: "italic",
+                letterSpacing: "-0.02em"
+              }}>
+                Now, to my&nbsp;<em>Favourite Part.</em>
+              </div>
+              {/* Right panel — Personal Projects */}
+              <div style={{ width: "100vw", flexShrink: 0, height: "100%", overflowY: "auto", display: "flex", alignItems: "center" }}>
+                <PersonalProjects />
+              </div>
+            </div>
+          </div>
+        </div>
+
         <Photography />
         <Contact />
 
