@@ -27,7 +27,7 @@ function TraversingSpaceText({ text, speed = 50 }) {
   );
 }
 
-function TextGroup() {
+function TextGroup({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
   const groupRef = useRef();
   const titleRef = useRef();
   const subTopRef = useRef();
@@ -158,7 +158,7 @@ function TextGroup() {
   );
 }
 
-export default function ThreeLandingText() {
+export default function ThreeLandingText({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
   return (
     <>
       <style>{`
@@ -184,6 +184,25 @@ export default function ThreeLandingText() {
           border-color: #000;
           color: #FFF;
         }
+        .sound-toggle {
+          background: transparent;
+          border: 1px solid rgba(0,0,0,0.3);
+          color: rgba(0,0,0,0.5);
+          font-family: 'Arial', sans-serif;
+          font-size: 8px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          padding: 4px 10px;
+          border-radius: 99px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          pointer-events: auto;
+        }
+        .sound-toggle:hover {
+          border-color: #000;
+          color: #000;
+        }
         .static-passage {
           width: 150px;
           font-family: 'Arial', sans-serif;
@@ -199,14 +218,19 @@ export default function ThreeLandingText() {
           word-spacing: -0.05em;
         }
       `}</style>
-      <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, zIndex: 12 }}>
+      <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, zIndex: 12, pointerEvents: 'none' }}>
         <Canvas
           camera={{ position: [0, 0, 5], fov: 50 }}
           style={{ width: '100%', height: '100%' }}
           eventSource={typeof window !== 'undefined' ? document.body : undefined}
         >
           <ambientLight intensity={1} />
-          <TextGroup />
+          <TextGroup 
+            isMuted={isMuted} 
+            setIsMuted={setIsMuted} 
+            hasStarted={hasStarted} 
+            startPortfolio={startPortfolio} 
+          />
         </Canvas>
       </div>
     </>

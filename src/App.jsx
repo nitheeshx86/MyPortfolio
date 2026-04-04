@@ -1,12 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BlobCursor from './components/BlobCursor';
 import Loader from './components/Loader';
 import ThreeLandingText from './components/ThreeLandingText';
 import './index.css';
+import pokemonMusic from './assets/pokemon.mp3';
 
 export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasStarted, setHasStarted] = useState(false);
+  const audioRef = useRef(null);
+
+  const startPortfolio = () => {
+    setIsMuted(false);
+    setHasStarted(true);
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+      if (!isMuted) {
+        audioRef.current.play().catch(err => console.log('Autoplay prevented:', err));
+      }
+    }
+  }, [isMuted]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,8 +64,15 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: '#000', color: '#FFF', position: 'relative' }}>
-      <Loader />
+      {hasStarted && <Loader />}
       <BlobCursor />
+      <audio 
+        ref={audioRef} 
+        src={pokemonMusic} 
+        loop 
+        muted={isMuted} 
+        style={{ display: 'none' }}
+      />
 
       {/* Sharp Viewport Border */}
       <div style={{
@@ -57,10 +82,10 @@ export default function App() {
         pointerEvents: 'none',
         zIndex: 1000,
       }} />
-      
+
       {/* Scrollable Container */}
       <div style={{ width: "100%", position: "relative", cursor: "none" }}>
-        
+
         {/* Landing Section Container */}
         <div style={{
           position: "sticky",
@@ -82,15 +107,15 @@ export default function App() {
 
           {/* Morphing Curve Bottom divider */}
           {/* Doubled the height (now 80vh) for maximum impact of the profound curve */}
-          <svg 
-            viewBox="0 0 100 500" 
+          <svg
+            viewBox="0 0 100 500"
             preserveAspectRatio="none"
             style={{
               position: "absolute",
               bottom: "-70vh", // Deep enough for the profound curve immersion
               left: 0,
               width: "100%",
-              height: "80vh", 
+              height: "80vh",
               fill: "rgb(255, 214, 1)",
               zIndex: 11,
               pointerEvents: "none"
@@ -106,9 +131,14 @@ export default function App() {
             width: "100%",
             zIndex: 12
           }}>
-            
+
             {/* Interactive 3D Texts */}
-            <ThreeLandingText />
+            <ThreeLandingText 
+              isMuted={isMuted} 
+              setIsMuted={setIsMuted} 
+              hasStarted={hasStarted}
+              startPortfolio={startPortfolio} 
+            />
 
             {/* Clock at bottom left */}
             <div style={{
@@ -141,18 +171,22 @@ export default function App() {
               pointerEvents: "none"
             }}>
               <div className="marquee-text" style={{ paddingRight: "40px" }}>
-                Scroll for professional section — Scroll for professional section — 
+                Scroll for professional section — Scroll for professional section —
               </div>
               <div className="marquee-text" style={{ position: "absolute", left: "100%" }}>
                 {/* This isn't needed if the first is long enough but duplication is better for CSS3 loops */}
               </div>
             </div>
 
-            {/* Portfolio indicator at bottom right */}
+            {/* Portfolio indicator at bottom right - Pikachu is the trigger */}
             <div style={{
               position: "absolute",
               bottom: "32px",
               right: "32px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: "8px",
               fontFamily: "'Arial', sans-serif",
               fontSize: "12px",
               fontWeight: 500,
@@ -160,8 +194,29 @@ export default function App() {
               color: "#000",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
+              pointerEvents: "none"
             }}>
-              Portfolio 2026
+              <img
+                src="https://play.pokemonshowdown.com/sprites/gen5ani/pikachu-starter.gif"
+                alt="Pikachu"
+                onClick={() => {
+                  if (!hasStarted) {
+                    startPortfolio();
+                  } else {
+                    setIsMuted(!isMuted);
+                  }
+                }}
+                style={{ 
+                  height: "80px", 
+                  objectFit: "contain", 
+                  imageRendering: "pixelated",
+                  cursor: "pointer",
+                  pointerEvents: "auto"
+                }}
+              />
+              <div style={{ textAlign: "right" }}>
+                Portfolio 2026
+              </div>
             </div>
           </div>
         </div>
@@ -179,7 +234,7 @@ export default function App() {
             left: "32px",
             margin: 0,
             fontWeight: 900,
-            color: scrollProgress < 0.9 ? "#000" : "#FFF", 
+            color: scrollProgress < 0.9 ? "#000" : "#FFF",
             fontSize: "42px",
             letterSpacing: "-0.03em",
             textTransform: "uppercase",
@@ -203,22 +258,24 @@ export default function App() {
             fontWeight: 600,
             pointerEvents: "auto",
           }}>
-            <a href="#projects" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Projects</a>
-            <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Photography</a>
-            <a href="#philosophy" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Philosophy</a>
+            <a href="#github" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Github//</a>
+            <a href="#linkedin" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Linkedin//</a>
+            <a href="#projects" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Projects]</a>
+            <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Photography]</a>
+            <a href="#philosophy" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Philosophy]</a>
           </nav>
         </div>
 
         {/* Removed spacer so the next section begins immediately */}
 
         {/* Experience Section (Black) */}
-        <div style={{ 
+        <div style={{
           minHeight: "100vh",
-          padding: "clamp(40px, 12vw, 140px)", 
-          backgroundColor: "#000", 
+          padding: "clamp(40px, 12vw, 140px)",
+          backgroundColor: "#000",
           color: "#FFF",
           position: "relative",
-          zIndex: 5 
+          zIndex: 5
         }}>
           <h2 style={{ fontSize: "5rem", margin: "100px 0 20px" }}>Experience</h2>
           <p style={{ maxWidth: "800px", fontSize: "1.5rem", lineHeight: "1.6" }}>
