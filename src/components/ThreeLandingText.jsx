@@ -123,7 +123,7 @@ function TextGroup({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
           maxWidth={viewport.width * 0.8}
           textAlign="center"
         >
-          feel free to explore what I do and a few about myself
+          a proof that curiosity scales into reality
         </Text>
       </group>
 
