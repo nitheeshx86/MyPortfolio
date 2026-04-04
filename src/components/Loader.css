@@ -1,0 +1,50 @@
+.loader-container {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647; /* Absolute maximum to cover Drei Html elements */
+  display: flex;
+  flex-direction: column;
+  pointer-events: none; /* Let clicks pass through if somehow interactable, though normally loader blocks */
+}
+
+/* Initially block pointer events during load */
+.loader-container.entering,
+.loader-container.visible {
+  pointer-events: all;
+}
+
+.loader-bar {
+  flex: 1; /* equal height for all bars */
+  width: 100%;
+  transform-origin: left;
+  transform: translateX(-100%); /* start entirely off-screen to the left */
+}
+
+/* Entering phase: animate bars sliding in from left to right */
+.loader-container.entering .loader-bar,
+.loader-container.visible .loader-bar {
+  animation: slideIn 0.8s cubic-bezier(0.77, 0, 0.175, 1) both;
+}
+
+/* Exiting phase: animate bars sliding out continuing to the right */
+.loader-container.exiting .loader-bar {
+  animation: slideOut 0.8s cubic-bezier(0.77, 0, 0.175, 1) both;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%); /* slide off to the right */
+  }
+}
