@@ -12,9 +12,9 @@ import MoreProjects from './components/MoreProjects';
 import Hackathons from './components/Hackathons';
 import HackathonReflection from './components/HackathonReflection';
 import Awards from './components/Awards';
-import ExtraInfo from './components/ExtraInfo';
-import Footer from './components/Footer';
+import { Learning, Dialect, Vouch } from './components/ExtraInfo';
 import Contact from './components/Contact';
+import Footer from './components/Footer';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import './index.css';
 import pokemonMusic from './assets/pokemon.mp3';
@@ -27,6 +27,8 @@ export default function App() {
   const hackathonsAnchorRef = useRef(null);
   const [awardsHorizProgress, setAwardsHorizProgress] = useState(0);
   const awardsAnchorRef = useRef(null);
+  const [extraHorizProgress, setExtraHorizProgress] = useState(0);
+  const extraInfoAnchorRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMuted, setIsMuted] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
@@ -92,15 +94,6 @@ export default function App() {
     { clamp: true }
   );
 
-  const [showWarning, setShowWarning] = useState(false);
-
-  }, []);
-
-  const closeWarning = () => {
-    localStorage.setItem('hasSeenConstructionWarning', 'true');
-    setShowWarning(false);
-  };
-
   const startPortfolio = () => {
     setIsMuted(false);
     setHasStarted(true);
@@ -143,6 +136,11 @@ export default function App() {
       const aEnd = awardsAnchorRef.current ? awardsAnchorRef.current.offsetTop : 0;
       const ahp = aEnd ? Math.max(0, Math.min((window.scrollY - aEnd) / 3200, 1)) : 0;
       setAwardsHorizProgress(ahp);
+
+      // 6. Extra Info Horizontal (Learning, Dialect, Vouch, Contact)
+      const eStart = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop : 0;
+      const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 4000, 1)) : 0;
+      setExtraHorizProgress(ehp);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -176,7 +174,7 @@ export default function App() {
   const path = `M 0,0 L 100,0 L 100,100 Q 50,${curveControlY} 0,100 Z`;
 
   return (
-    <div style={{ backgroundColor: '#000', color: '#FFF', position: 'relative' }}>
+    <div style={{ color: '#FFF', position: 'relative' }}>
       {hasStarted && <Loader />}
       <BlobCursor />
       <audio
@@ -317,7 +315,14 @@ export default function App() {
       </motion.div>
 
       {/* Main Container */}
-      <div style={{ width: "100%", position: "relative", cursor: "none", backgroundColor: "#000" }}>
+      <div style={{ 
+        width: "100%", 
+        position: "relative", 
+        cursor: "none", 
+        backgroundColor: "#000",
+        marginBottom: '500px', // Match footer height for reveal
+        zIndex: 10
+      }}>
 
         {/* STICKY ORCHESTRATION SEGMENT (Landing -> Horizontal Transition) */}
         <div style={{ height: "5000px", position: "relative", zIndex: 10 }}>
@@ -639,8 +644,28 @@ export default function App() {
           </div>
         </div>
 
-        <ExtraInfo />
-        <Contact />
+        <div ref={extraInfoAnchorRef} style={{ height: '5200px', position: 'relative' }}>
+          <div style={{
+            position: 'sticky',
+            top: 0,
+            height: '100vh',
+            overflow: 'hidden',
+            backgroundColor: '#000',
+          }}>
+            <div style={{
+              display: 'flex',
+              width: '400vw',
+              height: '100%',
+              transform: `translateX(-${extraHorizProgress * 300}vw)`,
+              transition: 'transform 0.08s ease-out'
+            }}>
+              <Learning />
+              <Dialect />
+              <Vouch />
+              <Contact />
+            </div>
+          </div>
+        </div>
 
       </div>
 

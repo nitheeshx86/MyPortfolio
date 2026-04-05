@@ -2,47 +2,133 @@ import React from 'react';
 
 const Contact = () => {
   return (
-    <footer id="contact" style={{ 
-      padding: "clamp(60px, 15vw, 200px)", 
+    <section id="contact" style={{ 
+      width: '100vw',
+      height: '100vh',
+      flexShrink: 0,
+      padding: "0 clamp(20px, 8vw, 150px)", 
       backgroundColor: "#000",
-      borderTop: "1px solid rgba(255,255,255,0.1)",
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
+      alignItems: "flex-start",
       justifyContent: "center",
-      minHeight: "40vh"
+      position: "relative",
+      overflow: "hidden"
     }}>
-      <div style={{ display: "flex", gap: "1rem", fontSize: "2.5rem", marginBottom: "2rem" }}>
-        🚧 🏗️ 🚧
-      </div>
-
-      <h2 style={{
-        fontSize: "clamp(1.5rem, 4vw, 3.5rem)",
+      {/* Background decoration */}
+      <div style={{
+        position: "absolute",
+        top: "-10%",
+        right: "-5%",
+        fontSize: "clamp(10rem, 30vw, 40rem)",
         fontWeight: 900,
-        fontFamily: "'Inter', sans-serif",
-        textTransform: "uppercase",
-        letterSpacing: "-0.03em",
-        color: "#FFF",
-        textAlign: "center",
-        marginBottom: "1rem"
+        color: "rgba(255, 255, 255, 0.02)",
+        lineHeight: 1,
+        pointerEvents: "none",
+        userSelect: "none",
+        fontFamily: "'Space Grotesk', sans-serif"
       }}>
-        Site Under Construction
-      </h2>
-
-      <p style={{
-        fontSize: "14px",
-        opacity: 0.3,
-        fontFamily: "'Inter', sans-serif",
-        letterSpacing: "0.1em",
-        textTransform: "uppercase"
-      }}>
-        More coming soon
-      </p>
-
-      <div style={{ marginTop: "6rem", fontSize: "10px", opacity: 0.15, color: "#FFF" }}>
-        © 2026 NITHEESH K
+        CONNECT
       </div>
-    </footer>
+
+      <div style={{ position: "relative", zIndex: 2 }}>
+        <h2 style={{
+          fontSize: "clamp(12px, 2vw, 16px)",
+          fontWeight: 900,
+          fontFamily: "'Inter', sans-serif",
+          textTransform: "uppercase",
+          letterSpacing: "0.4em",
+          color: "rgba(255, 255, 255, 0.4)",
+          marginBottom: "3rem"
+        }}>
+          [ Get in touch ]
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <h3 style={{
+            fontSize: "clamp(2rem, 8vw, 6.5rem)",
+            fontWeight: 800,
+            fontFamily: "'Space Grotesk', sans-serif",
+            letterSpacing: "-0.04em",
+            lineHeight: 1.1,
+            color: "#FFF",
+            maxWidth: "900px"
+          }}>
+            Got a vision? Let's make it real.
+          </h3>
+          
+        <div style={{ display: "flex", flexDirection: "column", gap: "2rem", marginTop: "2rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255, 255, 255, 0.3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Academic / Preferred</span>
+            <a href="mailto:nitheesh.k2024@vitstudent.ac.in" style={{
+              fontSize: "clamp(1.2rem, 4vw, 2.8rem)",
+              fontWeight: 400,
+              fontFamily: "'Times New Roman', serif",
+              fontStyle: "italic",
+              color: "#FFEB3B", // Accent yellow
+              textDecoration: "none",
+              borderBottom: "1px solid rgba(255, 235, 59, 0.2)",
+              paddingBottom: "4px",
+              width: "fit-content",
+              transition: "all 0.4s ease"
+            }}>
+              nitheesh.k2024@vitstudent.ac.in
+            </a>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255, 255, 255, 0.3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Personal</span>
+            <a href="mailto:knitheesh0360@gmail.com" style={{
+              fontSize: "clamp(1rem, 3.5vw, 2.2rem)",
+              fontWeight: 400,
+              fontFamily: "'Times New Roman', serif",
+              fontStyle: "italic",
+              color: "rgba(255, 255, 255, 0.8)", 
+              textDecoration: "none",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              paddingBottom: "4px",
+              width: "fit-content",
+              transition: "all 0.4s ease"
+            }}>
+              knitheesh0360@gmail.com
+            </a>
+          </div>
+        </div>
+        </div>
+
+        <div style={{ 
+          marginTop: "6rem", 
+          display: "flex", 
+          gap: "clamp(2rem, 5vw, 4rem)",
+          flexWrap: "wrap"
+        }}>
+          {[
+            { name: "LinkedIn", url: "#" },
+            { name: "GitHub", url: "#" },
+            { name: "Twitter", url: "#" },
+            { name: "Bento", url: "#" }
+          ].map((social) => (
+            <a 
+              key={social.name} 
+              href={social.url} 
+              style={{
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "#FFF",
+                textDecoration: "none",
+                opacity: 0.6,
+                letterSpacing: "0.05em",
+                transition: "opacity 0.3s ease"
+              }}
+              onMouseEnter={(e) => e.target.style.opacity = 1}
+              onMouseLeave={(e) => e.target.style.opacity = 0.6}
+            >
+              {social.name} //
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
