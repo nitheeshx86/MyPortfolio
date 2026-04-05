@@ -142,32 +142,32 @@ const NavBubble = ({ direction, onClick, disabled }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        width: "64px",
-        height: "128px",
-        borderRadius: direction === "left" ? "0 128px 128px 0" : "128px 0 0 128px",
-        backgroundColor: hovered && !disabled ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.07)",
-        border: "1px solid rgba(255,255,255,0.12)",
-        borderLeft: direction === "left" ? "none" : "1px solid rgba(255,255,255,0.12)",
-        borderRight: direction === "right" ? "none" : "1px solid rgba(255,255,255,0.12)",
-        cursor: disabled ? "default" : "pointer",
+        width: "60px",
+        height: "120px",
+        borderRadius: direction === "left" ? "0 120px 120px 0" : "120px 0 0 120px",
+        backgroundColor: disabled ? "#111" : hovered ? "#FFD700" : "#000",
+        border: "2px solid #FFF",
+        borderLeft: direction === "left" ? "none" : "2px solid #FFF",
+        borderRight: direction === "right" ? "none" : "2px solid #FFF",
+        cursor: disabled ? "not-allowed" : "pointer",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        transition: "all 0.25s ease",
-        opacity: disabled ? 0.15 : 1,
+        transition: "all 0.15s steps(4)", // Snappy retro transition
+        opacity: disabled ? 0.3 : 1,
         zIndex: 10,
-        backdropFilter: "blur(8px)"
+        boxShadow: hovered && !disabled ? `0 0 20px rgba(255, 215, 0, 0.3)` : "none"
       }}
     >
       <span style={{
-        color: "#FFF",
-        fontSize: "22px",
-        fontWeight: 300,
-        transform: hovered && !disabled ? `translateX(${direction === "left" ? "-3px" : "3px"})` : "none",
-        transition: "transform 0.25s ease",
-        display: "block"
+        color: hovered && !disabled ? "#000" : "#FFF",
+        fontSize: "24px",
+        fontWeight: 900,
+        fontFamily: "'Courier New', monospace",
+        transform: hovered && !disabled ? `translateX(${direction === "left" ? "-4px" : "4px"})` : "none",
+        transition: "transform 0.1s steps(2)",
       }}>
-        {direction === "left" ? "←" : "→"}
+        {direction === "left" ? "❮" : "❯"}
       </span>
     </button>
   );

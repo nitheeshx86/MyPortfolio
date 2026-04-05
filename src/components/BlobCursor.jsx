@@ -73,9 +73,11 @@ export default function BlobCursor() {
     const onMove = (e) => {
       posRef.current = { x: e.clientX, y: e.clientY };
       
-      // Determine if we are hovering a clickable element on every move
-      if (e.target.closest('a, button, [role="button"]')) {
-        targetScaleRef.current = 0.15;
+      // Determine if we are hovering a clickable element or a section that should hide the blob
+      if (e.target.closest('.hide-blob-cursor')) {
+        targetScaleRef.current = 0;
+      } else if (e.target.closest('a, button, [role="button"], .clickable-gba')) {
+        targetScaleRef.current = 0.04;
       } else {
         targetScaleRef.current = 1;
       }

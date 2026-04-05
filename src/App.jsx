@@ -8,8 +8,14 @@ import Projects from './components/Projects';
 import PersonalProjects from './components/PersonalProjects';
 import DeepDive from './components/DeepDive';
 import Photography from './components/Photography';
+import MoreProjects from './components/MoreProjects';
+import Hackathons from './components/Hackathons';
+import HackathonReflection from './components/HackathonReflection';
+import Awards from './components/Awards';
+import ExtraInfo from './components/ExtraInfo';
+import Footer from './components/Footer';
 import Contact from './components/Contact';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import './index.css';
 import pokemonMusic from './assets/pokemon.mp3';
 
@@ -17,6 +23,10 @@ export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [horizontalProgress, setHorizontalProgress] = useState(0);
   const [deepDiveHorizProgress, setDeepDiveHorizProgress] = useState(0);
+  const [hackathonsHorizProgress, setHackathonsHorizProgress] = useState(0);
+  const hackathonsAnchorRef = useRef(null);
+  const [awardsHorizProgress, setAwardsHorizProgress] = useState(0);
+  const awardsAnchorRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMuted, setIsMuted] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
@@ -82,6 +92,15 @@ export default function App() {
     { clamp: true }
   );
 
+  const [showWarning, setShowWarning] = useState(false);
+
+  }, []);
+
+  const closeWarning = () => {
+    localStorage.setItem('hasSeenConstructionWarning', 'true');
+    setShowWarning(false);
+  };
+
   const startPortfolio = () => {
     setIsMuted(false);
     setHasStarted(true);
@@ -112,6 +131,18 @@ export default function App() {
         : 0;
       const dhp = dEnd ? Math.max(0, Math.min((window.scrollY - dEnd) / 2400, 1)) : 0;
       setDeepDiveHorizProgress(dhp);
+
+      // 4. Hackathons Horizontal — kicks in after hackathonsAnchorRef
+      const hEnd = hackathonsAnchorRef.current
+        ? hackathonsAnchorRef.current.offsetTop
+        : 0;
+      const hhp = hEnd ? Math.max(0, Math.min((window.scrollY - hEnd) / 2400, 1)) : 0;
+      setHackathonsHorizProgress(hhp);
+
+      // 5. Awards Horizontal 
+      const aEnd = awardsAnchorRef.current ? awardsAnchorRef.current.offsetTop : 0;
+      const ahp = aEnd ? Math.max(0, Math.min((window.scrollY - aEnd) / 3200, 1)) : 0;
+      setAwardsHorizProgress(ahp);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -422,7 +453,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* HORIZONTAL SECTION (Under Landing) */}
+            {/* HORIZONTAL SECTION — slides up from below as landing flies off */}
             <div style={{
               position: "absolute",
               inset: 0,
@@ -430,6 +461,8 @@ export default function App() {
               overflow: "hidden",
               backgroundColor: "#000",
               color: "#FFF",
+              transform: `translateY(${(1 - scrollProgress) * 100}vh)`,
+              transition: "transform 0.05s linear"
             }}>
               {/* Horizontal Slider Content */}
               <div style={{
@@ -495,9 +528,123 @@ export default function App() {
         </div>
 
         <Photography />
+        <MoreProjects />
+
+        {/* "Now, the fun part" transition label */}
+        <div style={{
+          textAlign: 'center',
+          padding: 'clamp(3rem, 8vw, 6rem) 0',
+          backgroundColor: '#000',
+        }}>
+          <p style={{
+            fontFamily: "'Times New Roman', serif",
+            fontStyle: 'italic',
+            fontSize: 'clamp(1rem, 2vw, 1.5rem)',
+            color: 'rgba(255,255,255,0.3)',
+            margin: 0,
+            letterSpacing: '0.02em',
+          }}>
+            Now, the fun part
+          </p>
+        </div>
+
+        {/* Hackathons horizontal scroll anchor */}
+        <div ref={hackathonsAnchorRef} style={{ height: '3200px', position: 'relative' }}>
+          <div style={{
+            position: 'sticky',
+            top: 0,
+            height: '100vh',
+            overflow: 'hidden',
+            backgroundColor: '#000',
+          }}>
+            <div style={{
+              display: 'flex',
+              width: '200vw',
+              height: '100%',
+              transform: `translateX(-${hackathonsHorizProgress * 100}vw)`,
+              transition: 'transform 0.08s ease-out',
+            }}>
+              {/* Left placeholder — GBA boot screen */}
+              <div style={{
+                width: '100vw',
+                flexShrink: 0,
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#0a0800',
+                gap: '1.5rem',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                {/* scanlines */}
+                <div style={{
+                  position: 'absolute', inset: 0, pointerEvents: 'none',
+                  backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px)',
+                  zIndex: 2,
+                }} />
+                <div style={{
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontSize: 'clamp(8px, 1.4vw, 14px)',
+                  color: '#C9A800',
+                  letterSpacing: '0.3em',
+                  opacity: 0.5,
+                  zIndex: 3,
+                }}>
+                  NOW LOADING
+                </div>
+                <div style={{
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontSize: 'clamp(1.2rem, 4vw, 3.5rem)',
+                  color: '#FFD601',
+                  textShadow: '0 0 40px #FFD60166, 0 0 80px #FFD60133',
+                  lineHeight: 1.3,
+                  textAlign: 'center',
+                  zIndex: 3,
+                }}>
+                  NOW,<br />THE FUN<br />PART
+                </div>
+                <div style={{
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontSize: 'clamp(7px, 1vw, 10px)',
+                  color: '#39FF14',
+                  textShadow: '0 0 8px #39FF14',
+                  zIndex: 3,
+                }}>
+                  ▶▶ SCROLL TO CONTINUE
+                </div>
+              </div>
+              {/* Right panel — Hackathons */}
+              <div style={{ width: '100vw', flexShrink: 0, height: '100%', overflowY: 'auto', display: 'flex', alignItems: 'center' }}>
+                <Hackathons />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <HackathonReflection />
+
+        {/* ── AWARDS SECTION ── */}
+        <div ref={awardsAnchorRef} style={{ height: '400vh', position: 'relative' }}>
+          <div style={{
+            position: 'sticky',
+            top: 0,
+            width: '100vw',
+            height: '100vh',
+            overflow: 'hidden',
+            backgroundColor: '#000',
+          }}>
+            <Awards horizontalProgress={awardsHorizProgress} />
+          </div>
+        </div>
+
+        <ExtraInfo />
         <Contact />
 
       </div>
+
+      <Footer />
     </div>
   );
 }
