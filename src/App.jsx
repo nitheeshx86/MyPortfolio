@@ -12,9 +12,11 @@ import MoreProjects from './components/MoreProjects';
 import Hackathons from './components/Hackathons';
 import HackathonReflection from './components/HackathonReflection';
 import Awards from './components/Awards';
-import { Learning, Dialect, Vouch } from './components/ExtraInfo';
+import { Learning, Languages, Vouch } from './components/ExtraInfo';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ScrollSimulator from './components/ScrollSimulator';
+import ConstructionPopup from './components/ConstructionPopup';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import './index.css';
 import pokemonMusic from './assets/pokemon.mp3';
@@ -37,62 +39,53 @@ export default function App() {
   const deepDiveRef = useRef(null);
   const deepDiveEndRef = useRef(0);
 
-  // Dynamically track the bottom of the DeepDive section
-  const updateDeepDiveEnd = () => {
-    if (deepDiveRef.current) {
-      const rect = deepDiveRef.current.getBoundingClientRect();
-      deepDiveEndRef.current = rect.bottom + window.scrollY;
-    }
-  };
-
-  // Smooth Progress Logic via Framer Motion
   const { scrollY } = useScroll();
 
-  // Reactive internship progress: 0 at Research Intern panel entry → 1 at DeepDive end
-  const [deepDiveEndPx, setDeepDiveEndPx] = useState(10000);
+  // Sections tracking for ScrollSimulator
+  const [sectionBounds, setSectionBounds] = useState([]);
+  const internRef = useRef(null);
+  const projectsRef = useRef(null);
+  const hackathonsRef = useRef(null);
+  const additionalRef = useRef(null);
 
-  // Update deepDiveEndPx on scroll so useTransform always has fresh bounds
+  const calculateBounds = () => {
+    const sections = [];
+    
+    // 1. Internship (Research Intern + DeepDive)
+    const internStart = 2300; // Based on MEDxAI_START
+    const internEnd = deepDiveRef.current ? deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight : 0;
+    sections.push({ name: "INTERNSHIP ARC", start: internStart, end: internEnd });
+
+    // 2. Projects (Personal Projects)
+    const projectsStart = internEnd;
+    const projectsEnd = hackathonsAnchorRef.current ? hackathonsAnchorRef.current.offsetTop : 0;
+    sections.push({ name: "PROJECTS ARC", start: projectsStart, end: projectsEnd });
+
+    // 3. Hackathons
+    const hackStart = projectsEnd;
+    const hackEnd = awardsAnchorRef.current ? awardsAnchorRef.current.offsetTop : 0;
+    sections.push({ name: "HACKATHON ARC", start: hackStart, end: hackEnd });
+
+    setSectionBounds(sections);
+  };
+
   useEffect(() => {
-    const unsub = scrollY.on("change", () => {
-      if (deepDiveRef.current) {
-        const bottom = deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight;
-        if (Math.abs(bottom - deepDiveEndPx) > 10) setDeepDiveEndPx(bottom);
-      }
-    });
-    // Also run once on mount & resize
-    updateDeepDiveEnd();
-    if (deepDiveRef.current) {
-      setDeepDiveEndPx(deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight);
-    }
-    window.addEventListener('resize', () => {
-      if (deepDiveRef.current) {
-        setDeepDiveEndPx(deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight);
-      }
-    });
-    return () => unsub();
+    calculateBounds();
+    window.addEventListener('resize', calculateBounds);
+    const interval = setInterval(calculateBounds, 1000); // Poll for adjustments (e.g. content loads)
+    return () => {
+      window.removeEventListener('resize', calculateBounds);
+      clearInterval(interval);
+    };
   }, []);
 
-  const MEDxAI_START = 2300; // scrollY when Research Intern panel is centered
-
-  const rawInternshipProgress = useTransform(
-    scrollY,
-    [MEDxAI_START, deepDiveEndPx],
-    [0, 1],
-    { clamp: true }
-  );
-
-  const smoothInternshipProgress = useSpring(rawInternshipProgress, {
-    stiffness: 80,
-    damping: 25,
-    restDelta: 0.001
-  });
-
-  const barOpacity = useTransform(
-    scrollY,
-    [MEDxAI_START - 200, MEDxAI_START, deepDiveEndPx, deepDiveEndPx + 300],
-    [0, 1, 1, 0],
-    { clamp: true }
-  );
+  const [currentY, setCurrentY] = useState(0);
+  useEffect(() => {
+    const unsub = scrollY.on("change", (latest) => {
+      setCurrentY(latest);
+    });
+    return () => unsub();
+  }, [scrollY]);
 
   const startPortfolio = () => {
     setIsMuted(false);
@@ -110,22 +103,22 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // 1. Landing Progress (0 - 800px)
-      const p = Math.min(window.scrollY / 800, 1);
+      // 1. Landing Progress (0 - 1000px)
+      const p = Math.min(window.scrollY / 1000, 1);
       setScrollProgress(p);
 
-      // 2. Horizontal Progress (800px - 3800px)
-      const hp = Math.max(0, Math.min((window.scrollY - 800) / 3000, 1));
+      // 2. Horizontal Progress (1000px - 4500px)
+      const hp = Math.max(0, Math.min((window.scrollY - 1000) / 3500, 1));
       setHorizontalProgress(hp);
 
-      // 3. Projects Horizontal — kicks in after DeepDive ends
+      // 3. Projects Horizontal — kicks in after DeepDive ends (approx at 4500px scroll + DeepDive height)
       const dEnd = deepDiveRef.current
         ? deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight
         : 0;
       const dhp = dEnd ? Math.max(0, Math.min((window.scrollY - dEnd) / 2400, 1)) : 0;
       setDeepDiveHorizProgress(dhp);
 
-      // 4. Hackathons Horizontal — kicks in after hackathonsAnchorRef
+      // 4. Hackathons Horizontal
       const hEnd = hackathonsAnchorRef.current
         ? hackathonsAnchorRef.current.offsetTop
         : 0;
@@ -137,7 +130,7 @@ export default function App() {
       const ahp = aEnd ? Math.max(0, Math.min((window.scrollY - aEnd) / 3200, 1)) : 0;
       setAwardsHorizProgress(ahp);
 
-      // 6. Extra Info Horizontal (Learning, Dialect, Vouch, Contact)
+      // 6. Extra Info Horizontal (Learning, Languages, Vouch, Contact)
       const eStart = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop : 0;
       const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 4000, 1)) : 0;
       setExtraHorizProgress(ehp);
@@ -175,6 +168,7 @@ export default function App() {
 
   return (
     <div style={{ color: '#FFF', position: 'relative' }}>
+      <ConstructionPopup />
       {hasStarted && <Loader />}
       <BlobCursor />
       <audio
@@ -269,50 +263,7 @@ export default function App() {
         </nav>
       </div>
 
-      {/* Internship Vertical Progress Bar */}
-      <motion.div style={{
-        position: "fixed",
-        left: "64px",
-        top: "120px",
-        bottom: "120px",
-        width: "2px",
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        zIndex: 50,
-        pointerEvents: "none",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        opacity: barOpacity
-      }}>
-        {/* Label */}
-        <div style={{
-          position: "absolute",
-          top: "-20px",
-          left: "10px",
-          whiteSpace: "nowrap",
-          fontFamily: "'Arial', sans-serif",
-          fontSize: "10px",
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          opacity: 0.5,
-          transform: "rotate(90deg)",
-          transformOrigin: "left bottom",
-        }}>
-          Internship // MEDxAI
-        </div>
-
-        {/* Active Fill */}
-        <motion.div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            backgroundColor: "rgb(255, 214, 1)",
-            height: useTransform(smoothInternshipProgress, v => `${v * 100}%`),
-          }}
-        />
-      </motion.div>
+      <ScrollSimulator scrollY={currentY} sections={sectionBounds} />
 
       {/* Main Container */}
       <div style={{ 
@@ -325,7 +276,7 @@ export default function App() {
       }}>
 
         {/* STICKY ORCHESTRATION SEGMENT (Landing -> Horizontal Transition) */}
-        <div style={{ height: "5000px", position: "relative", zIndex: 10 }}>
+        <div style={{ height: "4500px", position: "relative", zIndex: 10 }}>
 
           {/* STICKY VIEWPORT WRAPPER */}
           <div style={{ position: "sticky", top: 0, left: 0, width: "100%", height: "100vh", overflow: "hidden" }}>
@@ -410,8 +361,8 @@ export default function App() {
                   textTransform: "uppercase",
                   pointerEvents: "none"
                 }}>
-                  <div className="marquee-text" style={{ paddingRight: "40px" }}>
-                    Scroll for professional section — Scroll for professional section —
+                  <div className="marquee-text" style={{ paddingRight: "0" }}>
+                    Scroll for professional section — Scroll for professional section — Scroll for professional section — 
                   </div>
                 </div>
 
@@ -628,7 +579,28 @@ export default function App() {
           </div>
         </div>
 
-        <HackathonReflection />
+        <div ref={additionalRef}>
+          <HackathonReflection />
+        </div>
+
+        {/* Label for Additional Specific Details */}
+        <div style={{
+          padding: '100px 0 20px',
+          textAlign: 'center',
+          backgroundColor: '#000',
+          borderTop: '1px solid rgba(255, 255, 255, 0.05)'
+        }}>
+          <span style={{
+            fontFamily: "'Press Start 2P', monospace",
+            fontSize: '10px',
+            color: 'rgb(255, 214, 1)',
+            opacity: 0.3,
+            letterSpacing: '0.4em',
+            textTransform: 'uppercase'
+          }}>
+            [ Additional Specific Details ]
+          </span>
+        </div>
 
         {/* ── AWARDS SECTION ── */}
         <div ref={awardsAnchorRef} style={{ height: '400vh', position: 'relative' }}>
@@ -660,7 +632,7 @@ export default function App() {
               transition: 'transform 0.08s ease-out'
             }}>
               <Learning />
-              <Dialect />
+              <Languages />
               <Vouch />
               <Contact />
             </div>

@@ -133,18 +133,18 @@ const ScreenIdle = ({ hack, idx, total }) => {
 
       {/* top bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={px({ fontSize: 6, color: YD })}>{hack.id}</span>
-        <span style={px({ fontSize: 6, color: hack.awardColor, textShadow: `0 0 8px ${hack.awardColor}` })}>{hack.award}</span>
+        <span style={px({ fontSize: 7, color: YD })}>{hack.id}</span>
+        <span style={px({ fontSize: 7, color: hack.awardColor, textShadow: `0 0 8px ${hack.awardColor}` })}>{hack.award}</span>
       </div>
 
       {/* sprite + title */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, flex: 1 }}>
         <span style={{ fontSize: 28, lineHeight: 1, filter: `drop-shadow(0 0 8px ${Y})`, marginTop: 4 }}>{hack.sprite}</span>
         <div style={{ flex: 1 }}>
-          <div style={px({ fontSize: 'clamp(8px, 1.3vw, 11px)', color: Y, lineHeight: 1.8, textShadow: `0 0 10px ${Y}66`, whiteSpace: 'pre-line' })}>
+          <div style={px({ fontSize: 'clamp(10px, 1.5vw, 13px)', color: Y, lineHeight: 1.8, textShadow: `0 0 10px ${Y}66`, whiteSpace: 'pre-line' })}>
             {hack.name}
           </div>
-          <div style={px({ fontSize: 6, color: '#5a6', marginTop: 4 })}>{hack.domain} · {hack.year}</div>
+          <div style={px({ fontSize: 7, color: '#5a6', marginTop: 4 })}>{hack.domain} · {hack.year}</div>
           <div style={{ marginTop: 8 }}>
             <Stars count={hack.stars} />
           </div>
@@ -153,14 +153,14 @@ const ScreenIdle = ({ hack, idx, total }) => {
       </div>
 
       {/* description preview */}
-      <div style={px({ fontSize: 6, color: '#8a9', lineHeight: 2, borderTop: '1px solid #2a3a00', paddingTop: 8 })}>
+      <div style={px({ fontSize: 7, color: '#8a9', lineHeight: 2, borderTop: '1px solid #2a3a00', paddingTop: 8 })}>
         {hack.description.slice(0, 80)}…
       </div>
 
       {/* pagination + hint */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={px({ fontSize: 6, color: '#3a4a00' })}>{String(idx + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}</span>
-        <span style={px({ fontSize: 6, color: blink ? YD : 'transparent' })}>▶ PRESS A/B</span>
+        <span style={px({ fontSize: 7, color: '#3a4a00' })}>{String(idx + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}</span>
+        <span style={px({ fontSize: 7, color: blink ? YD : 'transparent' })}>▶ PRESS A/B</span>
       </div>
     </div>
   );
@@ -196,12 +196,12 @@ const ScreenModal = ({ hack, mode, onClose }) => {
       </div>
 
       {/* name */}
-      <div style={px({ fontSize: 'clamp(7px, 1.1vw, 10px)', color: Y, textShadow: `0 0 8px ${Y}88`, lineHeight: 1.8, whiteSpace: 'pre-line' })}>
+      <div style={px({ fontSize: 'clamp(8px, 1.3vw, 12px)', color: Y, textShadow: `0 0 8px ${Y}88`, lineHeight: 1.8, whiteSpace: 'pre-line' })}>
         {hack.name}
       </div>
 
       {/* body text */}
-      <div style={px({ fontSize: 6, color: '#8ab890', lineHeight: 2.2, flex: 1, overflowY: 'auto' })}>
+      <div style={px({ fontSize: 7, color: '#8ab890', lineHeight: 2.2, flex: 1, overflowY: 'auto' })}>
         {body}
         <span style={{ opacity: blink ? 1 : 0, color: GRN }}>█</span>
       </div>
@@ -209,7 +209,7 @@ const ScreenModal = ({ hack, mode, onClose }) => {
       {/* tags */}
       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
         {hack.tags.map(t => (
-          <span key={t} style={px({ fontSize: 5, background: isA ? YD : '#1a3d00', color: isA ? '#000' : GRN, padding: '3px 6px' })}>{t}</span>
+          <span key={t} style={px({ fontSize: 6, background: isA ? YD : '#1a3d00', color: isA ? '#000' : GRN, padding: '3px 6px' })}>{t}</span>
         ))}
       </div>
 
@@ -231,7 +231,7 @@ const DKey = ({ label, icon, onClick, style = {} }) => {
       onMouseUp={() => setPressed(false)}
       onMouseLeave={() => setPressed(false)}
       style={{
-        width: 36, height: 36,
+        width: 42, height: 42,
         background: pressed ? '#444' : '#222',
         border: '2px solid #111',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -258,7 +258,7 @@ const ActionBtn = ({ label, color, onClick, subLabel }) => {
         onMouseUp={() => setPressed(false)}
         onMouseLeave={() => setPressed(false)}
         style={{
-          width: 48, height: 48,
+          width: 56, height: 56,
           borderRadius: '50%',
           background: pressed ? color + 'aa' : color,
           border: `3px solid ${color === Y ? YD : '#005500'}`,
@@ -407,10 +407,13 @@ const Hackathons = () => {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'relative',
-          width: 'clamp(480px, 70vw, 780px)',
-          background: `linear-gradient(160deg, ${BODY2} 0%, ${BODY} 60%)`,
+          width: 'clamp(540px, 85vw, 920px)',
+          background: `
+            repeating-linear-gradient(to bottom, transparent 0px, transparent 12px, rgba(0,0,0,0.06) 12px, rgba(0,0,0,0.06) 13px, transparent 13px),
+            linear-gradient(160deg, ${BODY2} 0%, ${BODY} 60%)
+          `,
           borderRadius: '24px 24px 40px 40px',
-          padding: '28px 32px 36px',
+          padding: '32px 40px 44px',
           boxSizing: 'border-box',
           boxShadow: `0 0 0 3px #0a0900, 0 0 0 5px #333, 0 12px 50px rgba(0,0,0,0.8), 0 0 60px ${Y}18`,
           display: 'flex',
@@ -420,6 +423,10 @@ const Hackathons = () => {
           overflow: 'hidden'
         }}
       >
+        {/* ── SHELL SIDE GRIPS (Realistic Grooves) ── */}
+        <div style={{ position: 'absolute', left: 0, top: '20%', bottom: '20%', width: 10, background: 'repeating-linear-gradient(to bottom, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 11px)', zIndex: 1, opacity: 0.5 }} />
+        <div style={{ position: 'absolute', right: 0, top: '20%', bottom: '20%', width: 10, background: 'repeating-linear-gradient(to bottom, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 11px)', zIndex: 1, opacity: 0.5 }} />
+
         {/* ── ELECTRONICS REVEAL LAYER (X-RAY) ── */}
         <div style={{
           position: 'absolute',
@@ -537,10 +544,10 @@ const Hackathons = () => {
             boxShadow: `0 0 8px ${GRN}`,
           }}
         />
-        <span style={px({ position: 'absolute', top: 14, left: 42, fontSize: 5, color: GRN, opacity: 0.6 })}>PWR</span>
+        <span style={px({ position: 'absolute', top: 14, left: 42, fontSize: 6, color: GRN, opacity: 0.6 })}>PWR</span>
 
         {/* GBA logo area */}
-        <span style={px({ position: 'absolute', top: 16, right: 28, fontSize: 6, color: '#444', letterSpacing: '0.15em' })}>
+        <span style={px({ position: 'absolute', top: 16, right: 28, fontSize: 7, color: '#444', letterSpacing: '0.15em' })}>
           GAME BOY<span style={{ color: Y }}> A</span>
         </span>
 
@@ -555,14 +562,14 @@ const Hackathons = () => {
             <div style={{ display: 'flex', gap: 0 }}>
               <DKey label="A" icon="◀" onClick={() => navigate(-1)} />
               {/* center nub */}
-              <div style={{ width: 36, height: 36, background: '#1a1a1a', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#2a2a2a', border: '2px solid #111' }} />
+              <div style={{ width: 42, height: 42, background: '#1a1a1a', border: '2px solid #111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#2a2a2a', border: '2px solid #111' }} />
               </div>
               <DKey label="D" icon="▶" onClick={() => navigate(1)} />
             </div>
             {/* Down */}
             <DKey label="S" icon="▼" onClick={() => navigate(1)} />
-            <span style={px({ fontSize: 5, color: '#444', marginTop: 6, letterSpacing: '0.15em' })}>W A S D</span>
+            <span style={px({ fontSize: 6, color: '#444', marginTop: 6, letterSpacing: '0.15em' })}>W A S D</span>
           </div>
 
           {/* ── SCREEN ── */}
@@ -578,7 +585,7 @@ const Hackathons = () => {
               {/* screen frame */}
               <div style={{
                 width: '100%',
-                aspectRatio: '3/2',
+                aspectRatio: '3/2.4',
                 background: SCR,
                 borderRadius: 4,
                 overflow: 'hidden',
@@ -613,7 +620,7 @@ const Hackathons = () => {
             </div>
 
             {/* screen label */}
-            <span style={px({ fontSize: 5, color: '#333', letterSpacing: '0.35em' })}>
+            <span style={px({ fontSize: 6, color: '#333', letterSpacing: '0.35em' })}>
               ── TFT COLOUR ──
             </span>
           </div>
@@ -653,28 +660,8 @@ const Hackathons = () => {
           <Speaker side="left" />
 
           {/* SELECT + START */}
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            {['SELECT', 'START'].map(lbl => (
-              <div key={lbl} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                <div
-                  onClick={() => { if (lbl === 'SELECT') { setMode(null); navigate(1); } }}
-                  style={{
-                    width: 38, height: 12,
-                    background: '#2a2620',
-                    borderRadius: 6,
-                    border: '1px solid #111',
-                    boxShadow: '0 2px 0 #111',
-                    cursor: lbl === 'SELECT' ? 'pointer' : 'default',
-                    transition: 'filter 0.1s',
-                  }}
-                  onMouseDown={e => e.currentTarget.style.filter = 'brightness(1.5)'}
-                  onMouseUp={e => e.currentTarget.style.filter = ''}
-                  onMouseLeave={e => e.currentTarget.style.filter = ''}
-                />
-                <span style={px({ fontSize: 5, color: '#444' })}>{lbl}</span>
-              </div>
-            ))}
-          </div>
+          {/* SELECT + START removed */}
+          <div style={{ flex: 1 }} />
 
           {/* right speaker */}
           <Speaker side="right" />

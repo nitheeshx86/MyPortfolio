@@ -80,57 +80,67 @@ export const Learning = () => (
   </div>
 );
 
-export const Dialect = () => (
-  <div style={{ 
-    width: '100vw', 
-    height: '100vh', 
-    flexShrink: 0, 
-    display: 'flex', 
-    flexDirection: 'column', 
-    justifyContent: 'center', 
-    padding: '0 clamp(20px, 8vw, 150px)',
-    backgroundColor: '#000',
-    position: 'relative'
-  }}>
-    <SectionTitle title="Dialect" bgText="Tongues" />
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '100px', maxWidth: '1200px' }}>
-      <div>
-        <span style={{ color: '#FFD601', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em', display: 'block', marginBottom: '30px' }}>Native / Fluent</span>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {['English', 'Tamil', 'Hindi', 'French'].map((lang, i) => (
-            <div key={lang} style={{ display: 'flex', alignItems: 'baseline', gap: '15px' }}>
-              <span style={{ fontSize: '11px', color: '#333' }}>0{i+1}</span>
-              <motion.span 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: i * 0.1 }}
-                style={{ fontFamily: "'Times New Roman', serif", fontSize: '3rem', color: '#fff', fontStyle: 'italic', lineHeight: 1 }}
-              >
-                {lang}
-              </motion.span>
+export const Languages = () => {
+  const allLanguages = [
+    { name: 'English', status: 'Native / Fluent' },
+    { name: 'Tamil', status: 'Native / Fluent' },
+    { name: 'Hindi', status: 'Native / Fluent' },
+    { name: 'French', status: 'Native / Fluent' },
+    { name: 'Malayalam', status: 'Exploring' },
+    { name: 'Kannada', status: 'Exploring' },
+    { name: 'German', status: 'Exploring' }
+  ];
+
+  return (
+    <div style={{ 
+      width: '100vw', 
+      height: '100vh', 
+      flexShrink: 0, 
+      display: 'flex', 
+      flexDirection: 'column', 
+      justifyContent: 'center', 
+      padding: '0 clamp(20px, 8vw, 150px)',
+      backgroundColor: '#000',
+      position: 'relative'
+    }}>
+      <SectionTitle title="Languages" bgText="Polyglot" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '1200px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px' }}>
+          {allLanguages.map((lang, i) => (
+            <div key={lang.name} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '15px' }}>
+                <span style={{ fontSize: '11px', color: '#333' }}>0{i+1}</span>
+                <motion.span 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.08 }}
+                  style={{ 
+                    fontFamily: "'Times New Roman', serif", 
+                    fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', 
+                    color: lang.status === 'Exploring' ? 'rgba(255,255,255,0.4)' : '#fff', 
+                    fontStyle: 'italic', 
+                    lineHeight: 1 
+                  }}
+                >
+                  {lang.name}
+                </motion.span>
+              </div>
+              <span style={{ 
+                fontSize: '8px', 
+                color: lang.status === 'Exploring' ? '#444' : '#FFD601', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.2em',
+                paddingLeft: '32px'
+              }}>
+                {lang.status}
+              </span>
             </div>
           ))}
         </div>
       </div>
-      <div>
-        <span style={{ color: '#444', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em', display: 'block', marginBottom: '30px' }}>Exploring in Leisure</span>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-          {['Malayalam', 'Kannada', 'German'].map((lang, i) => (
-            <motion.div 
-              key={lang}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              style={{ padding: '12px 24px', border: '1px solid #222', borderRadius: '50px', color: '#888', fontFamily: "'Inter', sans-serif", fontSize: '14px', fontWeight: 500 }}
-            >
-              {lang}
-            </motion.div>
-          ))}
-        </div>
-      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const Vouch = () => (
   <div style={{ 

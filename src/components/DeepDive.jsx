@@ -7,25 +7,47 @@ const DeepDive = () => {
       link: "#",
       text: "Technical Skills",
       image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
-      description: "SMILES processing, binding affinity analysis, drug synergy modelling ✦ GROMACS molecular dynamics simulations ✦ Linux HPC environments ✦ PyRX, PyMOL, ChimeraX, AlphaFold"
+      description: [
+        "SMILES processing, binding affinity analysis, drug synergy modelling",
+        "GROMACS molecular dynamics simulations",
+        "Linux HPC environments",
+        "PyRX, PyMOL, ChimeraX, AlphaFold"
+      ]
     },
     {
       link: "#",
       text: "Soft Skills",
       image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
-      description: "Data dashboards and client-facing reports ✦ Agile sprint planning and iterative releases ✦ Cross-functional collaboration across full build cycles ✦ Managing ambiguity independently with minimal documentation ✦ Communicating technical findings clearly to non-technical audiences"
+      description: [
+        "Data dashboards and client-facing reports",
+        "Agile sprint planning and iterative releases",
+        "Cross-functional collaboration across full build cycles",
+        "Managing ambiguity independently with minimal documentation",
+        "Communicating technical findings clearly to non-technical audiences"
+      ]
     },
     {
       link: "#",
       text: "Research Interests",
       image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
-      description: "Computational drug discovery ✦ Molecular dynamics simulation ✦ Quantum computing applications in pharma ✦ Intelligent narrowing of large chemical datasets ✦ Focused on making science faster without losing rigour"
+      description: [
+        "Computational drug discovery",
+        "Molecular dynamics simulation",
+        "Quantum computing applications in pharma",
+        "Intelligent narrowing of large chemical datasets",
+        "Focused on making science faster without losing rigour"
+      ]
     },
     {
       link: "#",
       text: "Measurable Outcomes",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
-      description: "5 internal tools shipped (one now outsourced to pharma) ✦ 1 drug candidate cleared wet-lab validation ✦ 20+ multinational clients (OmniActive) ✦ $120,000 AWS Braket credits ✦ Independent resolution of critical GROMACS query"
+      description: [
+        "5 internal tools shipped (one now outsourced to pharma)",
+        "1 drug candidate cleared wet-lab validation",
+        "20+ multinational clients",
+        "Independent resolution of critical GROMACS query"
+      ]
     }
   ];
 
@@ -66,14 +88,7 @@ const DeepDive = () => {
             textAlign: "right",
             letterSpacing: "-0.01em"
           }}>
-            I helped major Pharmacuetical companies <span style={{ fontStyle: 'italic' }}>reduce their search space</span> for the right set of chemicals by using specialised computational-chemistry workflows.
-          </p>
-        </div>
-        {/* SOFT SKILLS (Small vertical sidebar) */}
-        <div style={{ width: "160px", borderLeft: "1px solid rgba(255,255,255,0.2)", paddingLeft: "1.2rem" }}>
-          <h4 style={{ fontSize: "9px", opacity: 0.4, textTransform: "uppercase", marginBottom: "0.8rem" }}>Professional Edge</h4>
-          <p style={{ fontSize: "10px", lineHeight: "1.6", opacity: 0.6 }}>
-            Distilling high-fidelity neural outputs for 20+ multinational clients. Collaborative engineering between wet-lab reality and digital vision.
+            I helped major Pharmacuetical companies <span style={{ fontStyle: 'italic' }}>narrow down their search space</span> for the right set of chemicals by using specialised computational-chemistry workflows.
           </p>
         </div>
       </div>

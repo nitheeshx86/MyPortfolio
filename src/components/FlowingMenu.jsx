@@ -75,15 +75,26 @@ function FlowingMenu({
                 boxSizing: "border-box"
               }}
             >
-              <p style={{ 
-                fontSize: "clamp(1.2rem, 1.8vw, 2.4rem)", 
-                lineHeight: "1.25", 
+              <div style={{ 
+                fontSize: "clamp(1rem, 1.25vw, 1.8rem)", // Slightly smaller to fit multiple lines
+                lineHeight: "1.4", 
                 fontWeight: 600,
                 fontFamily: "'Inter', sans-serif",
-                letterSpacing: "-0.03em"
+                letterSpacing: "-0.02em"
               }}>
-                {items[hoveredIdx].description}
-              </p>
+                {Array.isArray(items[hoveredIdx].description) ? (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                    {items[hoveredIdx].description.map((line, i) => (
+                      <div key={i} style={{ position: "relative", paddingLeft: "1.5rem" }}>
+                        <span style={{ position: "absolute", left: 0, opacity: 0.3 }}>—</span>
+                        {line}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  items[hoveredIdx].description
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -111,42 +122,42 @@ function MenuItem({
     return topEdgeDist < bottomEdgeDist ? 'top' : 'bottom';
   };
 
-  useEffect(() => {
-    const calculateRepetitions = () => {
-      if (!marqueeInnerRef.current) return;
-      const marqueeContent = marqueeInnerRef.current.querySelector('.marquee-part');
-      if (!marqueeContent) return;
-      const contentWidth = marqueeContent.offsetWidth;
-      const viewportWidth = window.innerWidth;
-      const needed = Math.ceil(viewportWidth / contentWidth) + 2;
-      setRepetitions(Math.max(4, needed));
-    };
+  const calculateRepetitions = React.useCallback(() => {
+    if (!marqueeInnerRef.current) return;
+    const marqueeContent = marqueeInnerRef.current.querySelector('.marquee-part');
+    if (!marqueeContent) return;
+    const contentWidth = marqueeContent.offsetWidth;
+    const viewportWidth = window.innerWidth;
+    const needed = Math.ceil(viewportWidth / contentWidth) + 2;
+    setRepetitions(Math.max(4, needed));
+  }, [text, image]);
 
+  const setupMarquee = React.useCallback(() => {
+    if (!marqueeInnerRef.current) return;
+    const marqueeContent = marqueeInnerRef.current.querySelector('.marquee-part');
+    if (!marqueeContent) return;
+    const contentWidth = marqueeContent.offsetWidth;
+    if (contentWidth === 0) return;
+
+    if (animationRef.current) {
+      animationRef.current.kill();
+    }
+
+    animationRef.current = gsap.to(marqueeInnerRef.current, {
+      x: -contentWidth,
+      duration: speed,
+      ease: 'none',
+      repeat: -1
+    });
+  }, [speed]);
+
+  useEffect(() => {
     calculateRepetitions();
     window.addEventListener('resize', calculateRepetitions);
     return () => window.removeEventListener('resize', calculateRepetitions);
-  }, [text, image]);
+  }, [calculateRepetitions]);
 
   useEffect(() => {
-    const setupMarquee = () => {
-      if (!marqueeInnerRef.current) return;
-      const marqueeContent = marqueeInnerRef.current.querySelector('.marquee-part');
-      if (!marqueeContent) return;
-      const contentWidth = marqueeContent.offsetWidth;
-      if (contentWidth === 0) return;
-
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
-
-      animationRef.current = gsap.to(marqueeInnerRef.current, {
-        x: -contentWidth,
-        duration: speed,
-        ease: 'none',
-        repeat: -1
-      });
-    };
-
     const timer = setTimeout(setupMarquee, 50);
     return () => {
       clearTimeout(timer);
@@ -154,7 +165,7 @@ function MenuItem({
         animationRef.current.kill();
       }
     };
-  }, [text, image, repetitions, speed]);
+  }, [setupMarquee, repetitions]);
 
   const handleMouseEnter = ev => {
     onHoverStart();
@@ -244,7 +255,14 @@ function MenuItem({
                   backgroundPosition: "center",
                   filter: "grayscale(100%) brightness(0.8)"
                 }}
-              />
+              >
+                <img 
+                  src={image} 
+                  alt="" 
+                  onLoad={calculateRepetitions} 
+                  style={{ display: 'none' }} 
+                />
+              </div>
             </div>
           ))}
         </div>
