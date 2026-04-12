@@ -5,12 +5,12 @@ const SectionTitle = ({ title, bgText }) => (
   <div style={{ position: 'relative', marginBottom: '8rem', overflow: 'hidden' }}>
     <h2 style={{
       fontFamily: "'Inter', sans-serif",
-      fontSize: 'clamp(3rem, 10vw, 8rem)',
+      fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
       fontWeight: 900,
       color: '#fff',
-      letterSpacing: '-0.06em',
+      letterSpacing: '-0.04em',
       margin: 0,
-      lineHeight: 0.9,
+      lineHeight: 0.95,
       textTransform: 'uppercase',
       position: 'relative',
       zIndex: 2
@@ -23,7 +23,7 @@ const SectionTitle = ({ title, bgText }) => (
       left: '0',
       transform: 'translateY(-50%)',
       fontFamily: "'Times New Roman', Times, serif",
-      fontSize: '15vw',
+      fontSize: '9vw',
       color: 'rgba(255, 214, 1, 0.03)',
       fontStyle: 'italic',
       zIndex: 1,
@@ -57,8 +57,8 @@ export const Learning = () => (
       >
         <div style={{ minWidth: '150px', fontSize: '14px', color: '#FFD601', fontWeight: 800, fontFamily: "'Inter', sans-serif" }}>2021 — PRESENT</div>
         <div style={{ flex: 1 }}>
-          <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.8rem)', color: '#fff', margin: '0 0 15px 0', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Vellore Institute of Technology</h3>
-          <p style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '1.4rem', color: '#888', fontStyle: 'italic', margin: 0, maxWidth: '600px' }}>
+          <h3 style={{ fontSize: 'clamp(1.2rem, 2.5vw, 2rem)', color: '#fff', margin: '0 0 15px 0', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>Vellore Institute of Technology</h3>
+          <p style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '1rem', color: '#888', fontStyle: 'italic', margin: 0, maxWidth: '600px' }}>
             Pursuing a Bachelor of Technology in Electronics and Communication Engineering. Exploring the intersection of hardware architecture and high-performance computing.
           </p>
         </div>
@@ -72,8 +72,8 @@ export const Learning = () => (
       >
         <div style={{ minWidth: '150px', fontSize: '14px', color: '#555', fontWeight: 800, fontFamily: "'Inter', sans-serif" }}>SECONDARY</div>
         <div style={{ flex: 1 }}>
-          <h3 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', color: '#fff', margin: '0 0 15px 0', fontWeight: 900, textTransform: 'uppercase' }}>SBOA School and Junior College</h3>
-          <p style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '1.2rem', color: '#666', fontStyle: 'italic', margin: 0 }}>Laying the foundations of logic and curiosity.</p>
+          <h3 style={{ fontSize: 'clamp(1.1rem, 2vw, 1.6rem)', color: '#fff', margin: '0 0 15px 0', fontWeight: 900, textTransform: 'uppercase' }}>SBOA School and Junior College</h3>
+          <p style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '1rem', color: '#666', fontStyle: 'italic', margin: 0 }}>Laying the foundations of logic and curiosity.</p>
         </div>
       </motion.div>
     </div>
@@ -116,7 +116,7 @@ export const Languages = () => {
                   transition={{ delay: i * 0.08 }}
                   style={{ 
                     fontFamily: "'Times New Roman', serif", 
-                    fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', 
+                    fontSize: 'clamp(1.4rem, 2.5vw, 2.5rem)', 
                     color: lang.status === 'Exploring' ? 'rgba(255,255,255,0.4)' : '#fff', 
                     fontStyle: 'italic', 
                     lineHeight: 1 
@@ -165,9 +165,9 @@ export const Vouch = () => (
           style={{ padding: '40px', border: '1px solid #111', backgroundColor: 'rgba(255,255,255,0.01)', position: 'relative' }}
         >
           <div style={{ position: 'absolute', top: '20px', right: '30px', fontFamily: "'Times New Roman', serif", fontSize: '4rem', color: 'rgba(255, 214, 1, 0.1)', fontStyle: 'italic', lineHeight: 0.8 }}>“</div>
-          <h4 style={{ fontFamily: "'Inter', sans-serif", fontSize: '1.8rem', color: '#fff', margin: '0 0 8px 0', fontWeight: 900, letterSpacing: '-0.02em' }}>Reference Name</h4>
+          <h4 style={{ fontFamily: "'Inter', sans-serif", fontSize: '1.2rem', color: '#fff', margin: '0 0 8px 0', fontWeight: 900, letterSpacing: '-0.02em' }}>Reference Name</h4>
           <div style={{ color: '#FFD601', fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '40px' }}>Designation // Company</div>
-          <p style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '1.25rem', color: '#999', fontStyle: 'italic', lineHeight: 1.6, marginBottom: '40px' }}>
+          <p style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: '0.95rem', color: '#999', fontStyle: 'italic', lineHeight: 1.6, marginBottom: '40px' }}>
             "This serves as a placeholder for a testimonial or a brief description of how we collaborated on high-impact initiatives."
           </p>
           <div style={{ borderTop: '1px solid #222', paddingTop: '20px', display: 'flex', gap: '30px' }}>

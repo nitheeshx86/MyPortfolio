@@ -25,8 +25,7 @@ function buildBlobPath(points) {
 
 function getPoints(t, vx = 0, vy = 0) {
   const speed = Math.sqrt(vx * vx + vy * vy);
-  // Cap the stretch limit so it doesn't break entirely on fast mouse jerks
-  const stretch = Math.min(speed * 0.4, 60); 
+  const stretch = Math.min(speed * 0.4, 60);
   const moveAngle = speed > 0.1 ? Math.atan2(vy, vx) : 0;
 
   return Array.from({ length: NUM_POINTS }, (_, i) => {
@@ -38,20 +37,15 @@ function getPoints(t, vx = 0, vy = 0) {
       + 12 * Math.sin(t * 1.9  + i * 0.8)
       +  8 * Math.cos(t * 2.7  + i * 3.4)
       +  5 * Math.sin(t * 3.5  + i * 1.7);
-    
+
     let x = Math.cos(angle) * r;
     let y = Math.sin(angle) * r;
 
-    // Apply directional warp if interacting
     if (speed > 0.1) {
       const angleDiff = angle - moveAngle;
       const align = Math.cos(angleDiff);
-      
-      // Pull points forward and backward along movement vector
       x += Math.cos(moveAngle) * stretch * align;
       y += Math.sin(moveAngle) * stretch * align;
-      
-      // Squish perpendicular sides inward to preserve volume appearance
       const sideShrink = Math.abs(Math.sin(angleDiff));
       x -= Math.cos(angle) * (stretch * 0.5) * sideShrink;
       y -= Math.sin(angle) * (stretch * 0.5) * sideShrink;
@@ -61,32 +55,54 @@ function getPoints(t, vx = 0, vy = 0) {
   });
 }
 
+// ─── Proximity detection ──────────────────────────────────────────────────────
+// The blob starts shrinking when the cursor is within PROXIMITY_RADIUS pixels
+// of any clickable element — not just when hovering it exactly.
+// This gives users a much wider "warning zone" before the blob fully contracts.
+const PROXIMITY_RADIUS = 80;
+const CLICKABLE_SELECTOR = 'a, button, [role="button"], input, label, select, textarea, .clickable-gba';
+
+function nearClickable(cx, cy) {
+  const els = document.querySelectorAll(CLICKABLE_SELECTOR);
+  for (const el of els) {
+    if (el.closest('.hide-blob-cursor')) continue;
+    const rect = el.getBoundingClientRect();
+    // Nearest point on the bounding rect to the cursor
+    const nearX = Math.max(rect.left, Math.min(cx, rect.right));
+    const nearY = Math.max(rect.top,  Math.min(cy, rect.bottom));
+    if (Math.hypot(cx - nearX, cy - nearY) < PROXIMITY_RADIUS) return true;
+  }
+  return false;
+}
+
 export default function BlobCursor() {
   const blobRef = useRef(null);
   const pathRef = useRef(null);
-  const posRef = useRef({ x: -300, y: -300 });
+  const dotRef  = useRef(null);
+  const posRef  = useRef({ x: -300, y: -300 });
   const lerpRef = useRef({ x: -300, y: -300 });
-  const targetScaleRef = useRef(1);
+  const velRef  = useRef({ x: 0, y: 0 });
+  const targetScaleRef  = useRef(1);
   const currentScaleRef = useRef(1);
+  const hiddenRef = useRef(false);
 
   useEffect(() => {
     const onMove = (e) => {
       posRef.current = { x: e.clientX, y: e.clientY };
-      
-      // Determine if we are hovering a clickable element or a section that should hide the blob
+
       if (e.target.closest('.hide-blob-cursor')) {
+        hiddenRef.current = true;
         targetScaleRef.current = 0;
-      } else if (e.target.closest('a, button, [role="button"], .clickable-gba')) {
-        targetScaleRef.current = 0.04;
       } else {
-        targetScaleRef.current = 1;
+        hiddenRef.current = false;
+        // Shrink to 30% when near a clickable — visible enough to still guide the
+        // user, but small enough to clearly signal "you're close to something".
+        targetScaleRef.current = nearClickable(e.clientX, e.clientY) ? 0.30 : 1;
       }
     };
-    
+
     window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-    };
+    return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
   useEffect(() => {
@@ -96,25 +112,34 @@ export default function BlobCursor() {
     const tick = () => {
       t += 0.018;
 
-      // Calculate velocity vector distance
-      const vx = posRef.current.x - lerpRef.current.x;
-      const vy = posRef.current.y - lerpRef.current.y;
+      const rawVx = posRef.current.x - lerpRef.current.x;
+      const rawVy = posRef.current.y - lerpRef.current.y;
 
-      // Smooth follow
-      lerpRef.current.x += vx * 0.1;
-      lerpRef.current.y += vy * 0.1;
-      
-      // Smooth scale
+      velRef.current.x += (rawVx - velRef.current.x) * 0.12;
+      velRef.current.y += (rawVy - velRef.current.y) * 0.12;
+
+      lerpRef.current.x += rawVx * 0.11;
+      lerpRef.current.y += rawVy * 0.11;
+
       currentScaleRef.current += (targetScaleRef.current - currentScaleRef.current) * 0.15;
 
       if (blobRef.current) {
-        // Offset by 150px because the SVG is 300x300 and we want the mouse perfectly in the center.
         blobRef.current.style.transform =
           `translate(${lerpRef.current.x - 150}px, ${lerpRef.current.y - 150}px) scale(${currentScaleRef.current})`;
       }
 
+      // Crosshair dot — always at the TRUE cursor position (no lag).
+      // Only visible when the blob has shrunk, so users always see exactly
+      // where the click will land.
+      if (dotRef.current) {
+        dotRef.current.style.transform =
+          `translate(${posRef.current.x - 4}px, ${posRef.current.y - 4}px)`;
+        const showDot = currentScaleRef.current < 0.8 && !hiddenRef.current;
+        dotRef.current.style.opacity = showDot ? '1' : '0';
+      }
+
       if (pathRef.current) {
-        pathRef.current.setAttribute("d", buildBlobPath(getPoints(t, vx, vy)));
+        pathRef.current.setAttribute("d", buildBlobPath(getPoints(t, velRef.current.x, velRef.current.y)));
       }
 
       raf = requestAnimationFrame(tick);
@@ -125,26 +150,46 @@ export default function BlobCursor() {
   }, []);
 
   return (
-    <div
-      ref={blobRef}
-      style={{
-        position: "fixed",
-        top: 0, left: 0,
-        pointerEvents: "none",
-        mixBlendMode: "difference",
-        zIndex: 50000000,
-        willChange: "transform",
-        transformOrigin: "center center",
-        transform: "translate(-300px, -300px)",
-      }}
-    >
-      <svg
-        width="300" height="300"
-        viewBox="-150 -150 300 300"
-        style={{ overflow: "visible" }}
+    <>
+      <div
+        ref={blobRef}
+        style={{
+          position: "fixed",
+          top: 0, left: 0,
+          pointerEvents: "none",
+          mixBlendMode: "difference",
+          zIndex: 50000000,
+          willChange: "transform",
+          transformOrigin: "center center",
+          transform: "translate(-300px, -300px)",
+        }}
       >
-        <path ref={pathRef} fill="white" />
-      </svg>
-    </div>
+        <svg
+          width="300" height="300"
+          viewBox="-150 -150 300 300"
+          style={{ overflow: "visible" }}
+        >
+          <path ref={pathRef} fill="white" />
+        </svg>
+      </div>
+
+      {/* Crosshair dot — snaps to true cursor; only shown when blob is shrunk */}
+      <div
+        ref={dotRef}
+        style={{
+          position: "fixed",
+          top: 0, left: 0,
+          width: 8, height: 8,
+          borderRadius: "50%",
+          background: "white",
+          mixBlendMode: "difference",
+          pointerEvents: "none",
+          zIndex: 50000001,
+          opacity: 0,
+          transition: "opacity 0.15s ease",
+          willChange: "transform",
+        }}
+      />
+    </>
   );
 }

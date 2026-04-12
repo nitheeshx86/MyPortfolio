@@ -30,6 +30,7 @@ const HACKS = [
     domain: 'QUANTUM COMPUTING',
     sprite: '⚡',
     hp: 100,
+    // image: 'https://example.com/qiskit.jpg', // optional — add a URL here to show a screenshot
     description:
       'Built a quantum-classical hybrid drug screening pipeline. Placed 1st nationally — this opened the door to $120K in AWS Braket credits and the MEDxAI internship arc.',
     project: 'A Qiskit variational quantum eigensolver pipeline screened 10,000+ SMILES strings in parallel on AWS Braket, narrowing viable drug candidates by 60% vs classical baseline.',
@@ -46,6 +47,7 @@ const HACKS = [
     domain: 'HEALTH TECH',
     sprite: '🏥',
     hp: 82,
+    // image: 'https://example.com/sih.jpg',
     description:
       'AI-assisted diagnostic tool for rural settings, cutting misdiagnosis by surfacing lightweight vision-model alerts on edge devices.',
     project: 'MobileNet-V3 fine-tuned on annotated X-ray dataset; served via FastAPI on a Raspberry Pi 4. Sub-200ms inference. React dashboard for field health workers.',
@@ -62,6 +64,7 @@ const HACKS = [
     domain: 'DEV TOOLS',
     sprite: '🔬',
     hp: 74,
+    // image: 'https://example.com/hackvit.jpg',
     description:
       'Real-time collaborative 3-D protein annotation — remote teams could mark residues simultaneously over WebSockets.',
     project: 'NGL Viewer embedded in React, with a Node/Socket.io relay broadcasting residue selection events. Supports up to 12 concurrent annotators on a single PDB structure.',
@@ -78,6 +81,7 @@ const HACKS = [
     domain: 'OPEN SCIENCE',
     sprite: '🧬',
     hp: 61,
+    // image: 'https://example.com/hackthisfall.jpg',
     description:
       'Open-source GROMACS MD run analyser that auto-flags convergence failures, cutting manual review time by ~70%.',
     project: 'Python CLI that parses GROMACS .xvg energy files, runs rolling-window drift analysis, and emits coloured terminal reports + JSON for CI integration.',
@@ -133,34 +137,50 @@ const ScreenIdle = ({ hack, idx, total }) => {
 
       {/* top bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={px({ fontSize: 7, color: YD })}>{hack.id}</span>
-        <span style={px({ fontSize: 7, color: hack.awardColor, textShadow: `0 0 8px ${hack.awardColor}` })}>{hack.award}</span>
+        <span style={px({ fontSize: 10, color: YD })}>{hack.id}</span>
+        <span style={px({ fontSize: 10, color: hack.awardColor, textShadow: `0 0 8px ${hack.awardColor}` })}>{hack.award}</span>
       </div>
 
       {/* sprite + title */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, flex: 1 }}>
-        <span style={{ fontSize: 28, lineHeight: 1, filter: `drop-shadow(0 0 8px ${Y})`, marginTop: 4 }}>{hack.sprite}</span>
+        <span style={{ fontSize: 32, lineHeight: 1, filter: `drop-shadow(0 0 8px ${Y})`, marginTop: 4 }}>{hack.sprite}</span>
         <div style={{ flex: 1 }}>
-          <div style={px({ fontSize: 'clamp(10px, 1.5vw, 13px)', color: Y, lineHeight: 1.8, textShadow: `0 0 10px ${Y}66`, whiteSpace: 'pre-line' })}>
+          <div style={px({ fontSize: 'clamp(12px, 1.8vw, 16px)', color: Y, lineHeight: 1.8, textShadow: `0 0 10px ${Y}66`, whiteSpace: 'pre-line' })}>
             {hack.name}
           </div>
-          <div style={px({ fontSize: 7, color: '#5a6', marginTop: 4 })}>{hack.domain} · {hack.year}</div>
+          <div style={px({ fontSize: 10, color: '#5a6', marginTop: 4 })}>{hack.domain} · {hack.year}</div>
           <div style={{ marginTop: 8 }}>
             <Stars count={hack.stars} />
           </div>
           <HPBar value={hack.hp} />
         </div>
+        {/* Optional screenshot / image */}
+        {hack.image && (
+          <img
+            src={hack.image}
+            alt={hack.shortName}
+            style={{
+              width: 80,
+              height: 60,
+              objectFit: 'cover',
+              border: `1px solid ${YD}44`,
+              flexShrink: 0,
+              imageRendering: 'pixelated',
+              opacity: 0.85,
+            }}
+          />
+        )}
       </div>
 
       {/* description preview */}
-      <div style={px({ fontSize: 7, color: '#8a9', lineHeight: 2, borderTop: '1px solid #2a3a00', paddingTop: 8 })}>
-        {hack.description.slice(0, 80)}…
+      <div style={px({ fontSize: 10, color: '#8a9', lineHeight: 1.8, borderTop: '1px solid #2a3a00', paddingTop: 8 })}>
+        {hack.description.slice(0, 90)}…
       </div>
 
       {/* pagination + hint */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={px({ fontSize: 7, color: '#3a4a00' })}>{String(idx + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}</span>
-        <span style={px({ fontSize: 7, color: blink ? YD : 'transparent' })}>▶ PRESS A/B</span>
+        <span style={px({ fontSize: 9, color: '#3a4a00' })}>{String(idx + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}</span>
+        <span style={px({ fontSize: 9, color: blink ? YD : 'transparent' })}>▶ PRESS A/B</span>
       </div>
     </div>
   );
@@ -190,18 +210,34 @@ const ScreenModal = ({ hack, mode, onClose }) => {
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.25) 2px, rgba(0,0,0,0.25) 4px)', pointerEvents: 'none', zIndex: 10 }} />
 
       {/* header bar */}
-      <div style={{ background: isA ? YD : GRN, padding: '4px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={px({ fontSize: 7, color: '#000' })}>{title}</span>
-        <span style={px({ fontSize: 7, color: '#000' })}>{hack.year}</span>
+      <div style={{ background: isA ? YD : GRN, padding: '5px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={px({ fontSize: 10, color: '#000' })}>{title}</span>
+        <span style={px({ fontSize: 10, color: '#000' })}>{hack.year}</span>
       </div>
 
-      {/* name */}
-      <div style={px({ fontSize: 'clamp(8px, 1.3vw, 12px)', color: Y, textShadow: `0 0 8px ${Y}88`, lineHeight: 1.8, whiteSpace: 'pre-line' })}>
-        {hack.name}
+      {/* name + optional image */}
+      <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+        <div style={px({ fontSize: 'clamp(10px, 1.6vw, 14px)', color: Y, textShadow: `0 0 8px ${Y}88`, lineHeight: 1.8, whiteSpace: 'pre-line', flex: 1 })}>
+          {hack.name}
+        </div>
+        {hack.image && (
+          <img
+            src={hack.image}
+            alt={hack.shortName}
+            style={{
+              width: 90,
+              height: 65,
+              objectFit: 'cover',
+              border: `1px solid ${isA ? YD : GRN}55`,
+              flexShrink: 0,
+              opacity: 0.9,
+            }}
+          />
+        )}
       </div>
 
       {/* body text */}
-      <div style={px({ fontSize: 7, color: '#8ab890', lineHeight: 2.2, flex: 1, overflowY: 'auto' })}>
+      <div style={px({ fontSize: 10, color: '#8ab890', lineHeight: 2, flex: 1, overflowY: 'auto' })}>
         {body}
         <span style={{ opacity: blink ? 1 : 0, color: GRN }}>█</span>
       </div>
@@ -209,16 +245,84 @@ const ScreenModal = ({ hack, mode, onClose }) => {
       {/* tags */}
       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
         {hack.tags.map(t => (
-          <span key={t} style={px({ fontSize: 6, background: isA ? YD : '#1a3d00', color: isA ? '#000' : GRN, padding: '3px 6px' })}>{t}</span>
+          <span key={t} style={px({ fontSize: 9, background: isA ? YD : '#1a3d00', color: isA ? '#000' : GRN, padding: '3px 8px' })}>{t}</span>
         ))}
       </div>
 
       {/* close hint */}
-      <div style={px({ fontSize: 6, color: '#3a4a00', textAlign: 'right' })}>
+      <div style={px({ fontSize: 9, color: '#3a4a00', textAlign: 'right' })}>
         {isA ? '[A]' : '[B]'} CLOSE
       </div>
     </motion.div>
   );
+};
+
+/* ─── GBA Sound Engine (Web Audio API) ──────────────────────────────────── */
+let _audioCtx = null;
+const getCtx = () => {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+};
+
+const gbaSound = (type = 'dpad') => {
+  try {
+    const ctx = getCtx();
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.18, ctx.currentTime);
+    masterGain.connect(ctx.destination);
+
+    if (type === 'dpad') {
+      // Short percussive click — two detuned square waves, quick decay
+      [220, 180].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.4, ctx.currentTime + 0.07);
+        g.gain.setValueAtTime(0.6 - i * 0.2, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.09);
+      });
+    } else if (type === 'A') {
+      // Clean single-note chime — sine wave with a soft attack and gentle tail
+      const osc  = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const g    = ctx.createGain();
+      osc.type  = 'sine';
+      osc2.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc2.frequency.setValueAtTime(1320, ctx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.12);
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(0.45, ctx.currentTime + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+      osc.connect(g);
+      osc2.connect(g);
+      g.connect(masterGain);
+      osc.start(ctx.currentTime);  osc.stop(ctx.currentTime + 0.23);
+      osc2.start(ctx.currentTime); osc2.stop(ctx.currentTime + 0.23);
+    } else if (type === 'B') {
+      // Lower confirm tone — descending square + triangle blend
+      const freqs = [330, 220];
+      freqs.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        osc.type = i === 0 ? 'square' : 'triangle';
+        const t0 = ctx.currentTime + i * 0.055;
+        osc.frequency.setValueAtTime(freq, t0);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.7, t0 + 0.1);
+        g.gain.setValueAtTime(0.45, t0);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.13);
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start(t0);
+        osc.stop(t0 + 0.14);
+      });
+    }
+  } catch (e) { /* silently ignore if audio unavailable */ }
 };
 
 /* ─── D-pad button ───────────────────────────────────────────────────────── */
@@ -227,7 +331,7 @@ const DKey = ({ label, icon, onClick, style = {} }) => {
   return (
     <div
       className="clickable-gba"
-      onMouseDown={() => { setPressed(true); onClick(); }}
+      onMouseDown={() => { setPressed(true); gbaSound('dpad'); onClick(); }}
       onMouseUp={() => setPressed(false)}
       onMouseLeave={() => setPressed(false)}
       style={{
@@ -254,7 +358,7 @@ const ActionBtn = ({ label, color, onClick, subLabel }) => {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
       <div
         className="clickable-gba"
-        onMouseDown={() => { setPressed(true); onClick(); }}
+        onMouseDown={() => { setPressed(true); gbaSound(label); onClick(); }}
         onMouseUp={() => setPressed(false)}
         onMouseLeave={() => setPressed(false)}
         style={{
@@ -552,7 +656,7 @@ const Hackathons = () => {
         </span>
 
         {/* ── TOP ROW: D-pad | SCREEN | Action buttons ── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 2vw, 28px)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 2vw, 28px)', position: 'relative', zIndex: 3 }}>
 
           {/* ── D-PAD ── */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, flexShrink: 0 }}>
@@ -625,31 +729,25 @@ const Hackathons = () => {
             </span>
           </div>
 
-          {/* ── ACTION BUTTONS ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-            {/* A and B in diagonal layout */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <ActionBtn
-                  label="B"
-                  color={GRN}
-                  subLabel="PROJECT"
-                  onClick={() => setMode(m => m === 'B' ? null : 'B')}
-                />
-                <ActionBtn
-                  label="A"
-                  color={Y}
-                  subLabel="INFO"
-                  onClick={() => setMode(m => m === 'A' ? null : 'A')}
-                />
-              </div>
+          {/* ── ACTION BUTTONS — true GBA diagonal: B lower-left, A upper-right ── */}
+          <div style={{ position: 'relative', width: 130, height: 100, flexShrink: 0 }}>
+            {/* B — lower-left */}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+              <ActionBtn
+                label="B"
+                color={GRN}
+                subLabel="PROJECT"
+                onClick={() => setMode(m => m === 'B' ? null : 'B')}
+              />
             </div>
-            {/* hint */}
-            <div style={{ textAlign: 'center' }}>
-              <div style={px({ fontSize: 5, color: '#444', lineHeight: 2 })}>
-                <span style={{ color: Y }}>A</span> HACK INFO<br />
-                <span style={{ color: GRN }}>B</span> PROJECT
-              </div>
+            {/* A — upper-right */}
+            <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+              <ActionBtn
+                label="A"
+                color={Y}
+                subLabel="INFO"
+                onClick={() => setMode(m => m === 'A' ? null : 'A')}
+              />
             </div>
           </div>
         </div>

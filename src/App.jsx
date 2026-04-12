@@ -107,7 +107,9 @@ export default function App() {
       const p = Math.min(window.scrollY / 1000, 1);
       setScrollProgress(p);
 
-      // 2. Horizontal Progress (1000px - 4500px)
+      // 2. Horizontal Progress (1000px → 4500px scroll = slides in over 3500px of travel).
+      // The sticky track is 8000px tall. After scrollY=4500 the slide is fully revealed
+      // and sits static for ~3500px of dwell before DeepDive takes over.
       const hp = Math.max(0, Math.min((window.scrollY - 1000) / 3500, 1));
       setHorizontalProgress(hp);
 
@@ -132,7 +134,7 @@ export default function App() {
 
       // 6. Extra Info Horizontal (Learning, Languages, Vouch, Contact)
       const eStart = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop : 0;
-      const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 4000, 1)) : 0;
+      const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 5200, 1)) : 0;
       setExtraHorizProgress(ehp);
     };
 
@@ -276,7 +278,7 @@ export default function App() {
       }}>
 
         {/* STICKY ORCHESTRATION SEGMENT (Landing -> Horizontal Transition) */}
-        <div style={{ height: "4500px", position: "relative", zIndex: 10 }}>
+        <div style={{ height: "5800px", position: "relative", zIndex: 10 }}>
 
           {/* STICKY VIEWPORT WRAPPER */}
           <div style={{ position: "sticky", top: 0, left: 0, width: "100%", height: "100vh", overflow: "hidden" }}>
@@ -616,7 +618,7 @@ export default function App() {
           </div>
         </div>
 
-        <div ref={extraInfoAnchorRef} style={{ height: '5200px', position: 'relative' }}>
+        <div ref={extraInfoAnchorRef} style={{ height: '6200px', position: 'relative' }}>
           <div style={{
             position: 'sticky',
             top: 0,

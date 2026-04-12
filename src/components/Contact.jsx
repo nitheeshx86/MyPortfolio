@@ -46,10 +46,10 @@ const Contact = () => {
 
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <h3 style={{
-            fontSize: "clamp(2rem, 8vw, 6.5rem)",
+            fontSize: "clamp(1.6rem, 4vw, 3.5rem)",
             fontWeight: 800,
             fontFamily: "'Space Grotesk', sans-serif",
-            letterSpacing: "-0.04em",
+            letterSpacing: "-0.03em",
             lineHeight: 1.1,
             color: "#FFF",
             maxWidth: "900px"
@@ -61,7 +61,7 @@ const Contact = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255, 255, 255, 0.3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Academic / Preferred</span>
             <a href="mailto:nitheesh.k2024@vitstudent.ac.in" style={{
-              fontSize: "clamp(1.2rem, 4vw, 2.8rem)",
+              fontSize: "clamp(0.9rem, 2.5vw, 1.8rem)",
               fontWeight: 400,
               fontFamily: "'Times New Roman', serif",
               fontStyle: "italic",
@@ -79,7 +79,7 @@ const Contact = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <span style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255, 255, 255, 0.3)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Personal</span>
             <a href="mailto:knitheesh0360@gmail.com" style={{
-              fontSize: "clamp(1rem, 3.5vw, 2.2rem)",
+              fontSize: "clamp(0.8rem, 2vw, 1.4rem)",
               fontWeight: 400,
               fontFamily: "'Times New Roman', serif",
               fontStyle: "italic",
