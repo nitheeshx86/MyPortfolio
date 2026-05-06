@@ -5,14 +5,13 @@ const Footer = () => {
   return (
     <footer style={{
       width: '100%',
-      minHeight: '500px',
-      backgroundColor: '#FBFF00', // Bright Yellow
-      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='16' viewBox='0 0 20 16'%3E%3Cg fill='%23000000' fill-opacity='0.08'%3E%3Cpath fill-rule='evenodd' d='M0 .04C2.6.22 4.99 1.1 7 2.5A13.94 13.94 0 0 1 15 0h4c.34 0 .67.01 1 .04v2A12 12 0 0 0 7.17 12h5.12A7 7 0 0 1 20 7.07V14a5 5 0 0 0-3-4.58A5 5 0 0 0 14 14H0V7.07c.86.12 1.67.4 2.4.81.75-1.52 1.76-2.9 2.98-4.05C3.79 2.83 1.96 2.2 0 2.04v-2z'/%3E%3C/g%3E%3C/svg%3E")`,
+      minHeight: '800px',
+      background: "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
       color: '#000',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      padding: '100px clamp(20px, 8vw, 150px) 60px',
+      padding: '160px clamp(20px, 8vw, 150px) 100px',
       boxSizing: 'border-box',
       position: 'fixed',
       bottom: 0,
@@ -49,13 +48,13 @@ const Footer = () => {
         <div style={{ display: 'flex', gap: 'clamp(40px, 8vw, 120px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.4)' }}>Explore</span>
-            {['Home', 'Projects', 'Hackathons', 'Awards'].map(link => (
+            {['Home', 'Projects', 'Hackathons', 'Recognitions'].map(link => (
               <a key={link} href={`#${link.toLowerCase()}`} style={{ color: '#000', textDecoration: 'none', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.02em' }}>{link}</a>
             ))}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.4)' }}>Social</span>
-            {['LinkedIn', 'GitHub', 'Twitter', 'Bento'].map(link => (
+            {['LinkedIn', 'GitHub'].map(link => (
               <a key={link} href="#" style={{ color: '#000', textDecoration: 'none', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.02em' }}>{link}</a>
             ))}
           </div>
@@ -89,6 +88,22 @@ const Footer = () => {
         }}>
           © 2026 NITHEESH PORTFOLIO. ALL RIGHTS RESERVED.
         </div>
+      </div>
+
+      {/* Background Quote */}
+      <div style={{
+        position: 'absolute',
+        bottom: '20%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        fontFamily: "'Cedarville Cursive', cursive",
+        fontSize: 'clamp(2rem, 8vw, 6rem)',
+        color: 'rgba(0,0,0,0.04)',
+        whiteSpace: 'nowrap',
+        pointerEvents: 'none',
+        zIndex: -1
+      }}>
+        When nothing seems right, go left.
       </div>
     </footer>
   );

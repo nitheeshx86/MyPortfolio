@@ -12,7 +12,7 @@ import MoreProjects from './components/MoreProjects';
 import Hackathons from './components/Hackathons';
 import HackathonReflection from './components/HackathonReflection';
 import Awards from './components/Awards';
-import { Learning, Languages, Vouch } from './components/ExtraInfo';
+import { Learning, Vouch } from './components/ExtraInfo';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ScrollSimulator from './components/ScrollSimulator';
@@ -20,6 +20,7 @@ import ConstructionPopup from './components/ConstructionPopup';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import './index.css';
 import pokemonMusic from './assets/pokemon.mp3';
+import samsungLogo from './assets/samsung.svg';
 
 export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -52,7 +53,7 @@ export default function App() {
     const sections = [];
     
     // 1. Internship (Research Intern + DeepDive)
-    const internStart = 2300; // Based on MEDxAI_START
+    const internStart = 2300; 
     const internEnd = deepDiveRef.current ? deepDiveRef.current.offsetTop + deepDiveRef.current.offsetHeight : 0;
     sections.push({ name: "INTERNSHIP ARC", start: internStart, end: internEnd });
 
@@ -65,6 +66,10 @@ export default function App() {
     const hackStart = projectsEnd;
     const hackEnd = awardsAnchorRef.current ? awardsAnchorRef.current.offsetTop : 0;
     sections.push({ name: "HACKATHON ARC", start: hackStart, end: hackEnd });
+
+    // 4. Recognitions & Academy
+    const endPoint = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop + 4800 : awardsEnd + 4800;
+    sections.push({ name: "ACADEMIC ARC", start: hackEnd, end: endPoint });
 
     setSectionBounds(sections);
   };
@@ -124,17 +129,17 @@ export default function App() {
       const hEnd = hackathonsAnchorRef.current
         ? hackathonsAnchorRef.current.offsetTop
         : 0;
-      const hhp = hEnd ? Math.max(0, Math.min((window.scrollY - hEnd) / 2400, 1)) : 0;
+      const hhp = hEnd ? Math.max(0, Math.min((window.scrollY - hEnd) / 2200, 1)) : 0;
       setHackathonsHorizProgress(hhp);
 
       // 5. Awards Horizontal 
       const aEnd = awardsAnchorRef.current ? awardsAnchorRef.current.offsetTop : 0;
-      const ahp = aEnd ? Math.max(0, Math.min((window.scrollY - aEnd) / 3200, 1)) : 0;
+      const ahp = aEnd ? Math.max(0, Math.min((window.scrollY - aEnd) / 4000, 1)) : 0;
       setAwardsHorizProgress(ahp);
 
-      // 6. Extra Info Horizontal (Learning, Languages, Vouch, Contact)
+      // 6. Extra Info Horizontal (Learning, Vouch, Contact)
       const eStart = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop : 0;
-      const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 5200, 1)) : 0;
+      const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 4800, 1)) : 0;
       setExtraHorizProgress(ehp);
     };
 
@@ -261,11 +266,9 @@ export default function App() {
           <a href="#linkedin" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Linkedin//</a>
           <a href="#projects" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Research]</a>
           <a href="#details" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Details]</a>
-          <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Photography]</a>
+          <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Life]</a>
         </nav>
       </div>
-
-      <ScrollSimulator scrollY={currentY} sections={sectionBounds} />
 
       {/* Main Container */}
       <div style={{ 
@@ -273,9 +276,10 @@ export default function App() {
         position: "relative", 
         cursor: "none", 
         backgroundColor: "#000",
-        marginBottom: '500px', // Match footer height for reveal
+        marginBottom: '800px', // Match footer height for reveal
         zIndex: 10
       }}>
+        <ScrollSimulator scrollY={currentY} sections={sectionBounds} />
 
         {/* STICKY ORCHESTRATION SEGMENT (Landing -> Horizontal Transition) */}
         <div style={{ height: "5800px", position: "relative", zIndex: 10 }}>
@@ -333,6 +337,90 @@ export default function App() {
                   startPortfolio={startPortfolio}
                 />
                 <Lightning isAudioOn={!isMuted && hasStarted} />
+
+                {/* --- SUMMER RESEARCH UPDATE (Sticker with Peel Effect) --- */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                  animate={{ opacity: 1, scale: 1, rotate: -45 }}
+                  transition={{ 
+                    delay: 1.8, 
+                    duration: 1.2, 
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 12
+                  }}
+                  whileHover={{ scale: 1.1, rotate: -40, filter: "brightness(1.1)" }}
+                  style={{
+                    position: "absolute",
+                    top: "25%",
+                    left: "10%",
+                    zIndex: 100,
+                    cursor: "pointer",
+                    pointerEvents: "auto",
+                  }}
+                >
+                  <div style={{
+                    position: "relative",
+                    backgroundColor: "#000",
+                    color: "rgb(255, 214, 1)",
+                    padding: "16px 32px",
+                    fontFamily: "'Arial Black', sans-serif",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    border: "4px solid #FFF",
+                    borderRadius: "2px",
+                    boxShadow: "0 25px 50px rgba(0,0,0,0.4)",
+                    overflow: "hidden" 
+                  }}>
+                    {/* Peel Fold Effect */}
+                    <div style={{
+                      position: "absolute",
+                      bottom: "-1px",
+                      right: "-1px",
+                      width: "40px",
+                      height: "40px",
+                      background: "linear-gradient(135deg, transparent 50%, #FFF 50%)",
+                      zIndex: 5,
+                      boxShadow: "-5px -5px 15px rgba(0,0,0,0.5)"
+                    }} />
+                    
+                    <span style={{ 
+                      fontSize: "10px", 
+                      color: "#FFF",
+                      opacity: 0.9, 
+                      marginBottom: "6px",
+                      letterSpacing: "0.3em",
+                      fontWeight: 900,
+                      display: "block"
+                    }}>
+                      [ UPDATE // 2026 ]
+                    </span>
+                    <div style={{
+                      fontSize: "22px",
+                      lineHeight: 0.95,
+                      letterSpacing: "-0.04em",
+                      fontWeight: 1000,
+                      color: "rgb(255, 214, 1)",
+                      whiteSpace: "nowrap",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "6px"
+                    }}>
+                      Summer Research
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <span style={{ color: "#FFF" }}>@</span>
+                        <img 
+                          src={samsungLogo} 
+                          alt="Samsung" 
+                          style={{ 
+                            height: "30px", // Slightly larger for clarity
+                            width: "auto"
+                          }} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
 
                 {/* Clock at bottom left */}
                 <div style={{
@@ -488,26 +576,8 @@ export default function App() {
         <Photography />
         <MoreProjects />
 
-        {/* "Now, the fun part" transition label */}
-        <div style={{
-          textAlign: 'center',
-          padding: 'clamp(3rem, 8vw, 6rem) 0',
-          backgroundColor: '#000',
-        }}>
-          <p style={{
-            fontFamily: "'Times New Roman', serif",
-            fontStyle: 'italic',
-            fontSize: 'clamp(1rem, 2vw, 1.5rem)',
-            color: 'rgba(255,255,255,0.3)',
-            margin: 0,
-            letterSpacing: '0.02em',
-          }}>
-            Now, the fun part
-          </p>
-        </div>
-
         {/* Hackathons horizontal scroll anchor */}
-        <div ref={hackathonsAnchorRef} style={{ height: '3200px', position: 'relative' }}>
+        <div ref={hackathonsAnchorRef} style={{ height: '4200px', position: 'relative' }}>
           <div style={{
             position: 'sticky',
             top: 0,
@@ -531,7 +601,7 @@ export default function App() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: '#0a0800',
+                backgroundColor: '#000',
                 gap: '1.5rem',
                 position: 'relative',
                 overflow: 'hidden',
@@ -542,16 +612,6 @@ export default function App() {
                   backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px)',
                   zIndex: 2,
                 }} />
-                <div style={{
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontSize: 'clamp(8px, 1.4vw, 14px)',
-                  color: '#C9A800',
-                  letterSpacing: '0.3em',
-                  opacity: 0.5,
-                  zIndex: 3,
-                }}>
-                  NOW LOADING
-                </div>
                 <div style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: 'clamp(1.2rem, 4vw, 3.5rem)',
@@ -618,7 +678,7 @@ export default function App() {
           </div>
         </div>
 
-        <div ref={extraInfoAnchorRef} style={{ height: '6200px', position: 'relative' }}>
+        <div ref={extraInfoAnchorRef} style={{ height: '4800px', position: 'relative' }}>
           <div style={{
             position: 'sticky',
             top: 0,
@@ -626,18 +686,37 @@ export default function App() {
             overflow: 'hidden',
             backgroundColor: '#000',
           }}>
-            <div style={{
-              display: 'flex',
-              width: '400vw',
-              height: '100%',
-              transform: `translateX(-${extraHorizProgress * 300}vw)`,
-              transition: 'transform 0.08s ease-out'
-            }}>
-              <Learning />
-              <Languages />
-              <Vouch />
-              <Contact />
-            </div>
+            {/* 
+                Mapping ehp (0-1) to 3 slides with dwell time:
+                0.0 - 0.2: Slide 1 (Learning)
+                0.2 - 0.4: Transition 1 -> 2
+                0.4 - 0.6: Slide 2 (Vouch)
+                0.6 - 0.8: Transition 2 -> 3
+                0.8 - 1.0: Slide 3 (Contact)
+            */}
+            {(() => {
+              let p = extraHorizProgress;
+              let tx = 0;
+              if (p < 0.2) tx = 0;
+              else if (p < 0.4) tx = ((p - 0.2) / 0.2) * 100;
+              else if (p < 0.6) tx = 100;
+              else if (p < 0.8) tx = 100 + ((p - 0.6) / 0.2) * 100;
+              else tx = 200;
+
+              return (
+                <div style={{
+                  display: 'flex',
+                  width: '300vw',
+                  height: '100%',
+                  transform: `translateX(-${tx}vw)`,
+                  transition: 'transform 0.1s ease-out'
+                }}>
+                  <Learning />
+                  <Vouch />
+                  <Contact />
+                </div>
+              );
+            })()}
           </div>
         </div>
 

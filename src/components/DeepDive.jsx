@@ -1,5 +1,6 @@
 import React from 'react';
 import FlowingMenu from './FlowingMenu';
+import teamImg from '../assets/MEDxAI/team.jpeg';
 
 const DeepDive = () => {
   const menuItems = [
@@ -65,15 +66,30 @@ const DeepDive = () => {
       overflow: "visible"
     }}>
 
-      {/* 01: ORIGIN (Shifted Left) */}
-      <div style={{ maxWidth: "400px", alignSelf: "flex-start", position: "relative" }}>
-        <h4 style={{ fontSize: "40px", fontFamily: "'Times New Roman', serif", fontStyle: "italic", opacity: 0.1, position: "absolute", top: "-25px", left: "-15px" }}>01</h4>
-        <h3 style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "1rem" }}>How it started_</h3>
-        <p style={{ opacity: 0.7, fontSize: "13px", lineHeight: "1.6", textAlign: "justify" }}>
-          Honestly? I got lucky.
-          I won the IBM Qiskit Fall Fest national hackathon in my first semester — still cannot fully believe that happened. One of the judges happened to have connections with MEDxAI, who were exploring quantum computing in drug discovery at the time. One conversation led to another, and before I had fully processed what was happening, I was sitting with $120,000 worth of AWS Braket credits in my first week of joining.
-          I had absolutely no idea what I was doing. Which, looking back, was probably the best place to start.
-        </p>
+      {/* 01: ORIGIN & TEAM IMAGE */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "4rem", flexWrap: "wrap", width: "100%" }}>
+        <div style={{ maxWidth: "400px", position: "relative" }}>
+          <h4 style={{ fontSize: "40px", fontFamily: "'Times New Roman', serif", fontStyle: "italic", opacity: 0.1, position: "absolute", top: "-25px", left: "-15px" }}>01</h4>
+          <h3 style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "1rem" }}>How it started_</h3>
+          <p style={{ opacity: 0.7, fontSize: "13px", lineHeight: "1.6", textAlign: "justify" }}>
+            Honestly? I got lucky.
+            I won the IBM Qiskit Fall Fest national hackathon in my first semester — still cannot fully believe that happened. One of the judges happened to have connections with MEDxAI, who were exploring quantum computing in drug discovery at the time. One conversation led to another, and before I had fully processed what was happening, I was sitting with $120,000 worth of AWS Braket credits in my first week of joining.
+            I had absolutely no idea what I was doing. Which, looking back, was probably the best place to start.
+          </p>
+        </div>
+        
+        {/* Team Image */}
+        <div style={{ 
+          flex: "1", 
+          maxWidth: "400px", 
+          minWidth: "300px",
+          borderRadius: "8px", 
+          overflow: "hidden",
+          opacity: 0.9,
+          boxShadow: "0 20px 40px rgba(0,0,0,0.5)"
+        }}>
+          <img src={teamImg} alt="MEDxAI Team" style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", display: "block" }} />
+        </div>
       </div>
 
       {/* 02 & 03: TECHNICAL & SOFT SKILLS (Interlocking) */}

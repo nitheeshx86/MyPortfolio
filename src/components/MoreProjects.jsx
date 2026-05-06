@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const projectIndex = [
-  { id: '01', name: 'Drug Explorer', year: '2023', tech: 'React, GROMACS', description: 'Internal drug discovery tool for MEDxAI.' },
-  { id: '02', name: 'Synergy Map', year: '2024', tech: 'Python, D3.js', description: 'Visualizing drug-to-drug interactions at scale.' },
-  { id: '03', name: 'Pikachu AI', year: '2022', tech: 'PyTorch, OpenCV', description: 'Real-time emotion detection and interactive companion.' },
-  { id: '04', name: 'HPC Scheduler', year: '2023', tech: 'C, Linux', description: 'Custom priority-based job queue for Linux clusters.' },
-  { id: '05', name: 'Binding Suite', year: '2023', tech: 'ChimeraX, Python', description: 'Automating molecular docking for high-throughput screening.' },
-  { id: '06', name: 'Portfolio 2026', year: '2026', tech: 'Three.js, Framer Motion', description: 'The site you are currently navigating.' }
+  { id: '01', name: 'Q-BMS ⭐', year: '2024', tech: 'PennyLane, QAOA', description: 'Reconfigurable battery system leveraging quantum optimization. 1st Place IBM Qiskit Fall Fest.' },
+  { id: '02', name: 'CueZi ⭐', year: '2025', tech: 'Flutter, Firebase, Gemini', description: 'Smart meal planning app with AI recipe generation and automated grocery delivery.' },
+  { id: '03', name: 'Financial Fraud Detection', year: '2025', tech: 'QML, QFL', description: 'Quantum Federated Learning for secure financial fraud detection (NYU Abu Dhabi).' },
+  { id: '04', name: 'Reversible Vedic Multipliers', year: '2025', tech: 'Clifford+T, Toffoli', description: 'Reduced T-Depth in modular exponentiation for fault-tolerant quantum computing.' },
+  { id: '05', name: 'Counterfeit Prevention', year: '2024', tech: 'Ethereum, Smart Contracts', description: 'NFT-backed QR tracking system for asset authenticity on the blockchain.' },
+  { id: '06', name: 'Rescue Rover-Drone', year: '2024', tech: 'SLAM, OpenCV, A*', description: 'Autonomous rover-drone system for disaster rescue and pathfinding.' },
+  { id: '07', name: 'Pothole Detection AI', year: '2025', tech: 'YOLOv8, TF Lite, Pi 5', description: 'Real-time edge AI pothole detection with ultrasonic depth mapping.' },
+  { id: '08', name: 'Construction Robot', year: '2024', tech: 'Robotics, Hardware', description: 'Automated wall putty application machine (Patent Acquired).' },
+  { id: '09', name: 'Student Satellite', year: '2025', tech: 'Aerospace Engineering', description: 'Development of a student-built satellite in collaboration with ISRO.' },
+  { id: '10', name: 'Flexible Array Transducers', year: '2024', tech: 'Bio-instrumentation', description: 'Advanced non-invasive diagnostic imaging technology (Under NDA).' },
+  { id: '11', name: 'Kidney Stones Classifier', year: '2024', tech: '3D Modeling, Data', description: 'Classification and 3D modeling of kidney stones for Govt. Stanley Medical.' },
+  { id: '12', name: 'Aromaticity Predictor', year: '2023', tech: 'Python, RDKit', description: 'Predicts aromaticity of complex bio-molecules via Streamlit.' },
+  { id: '13', name: 'Industrial 3D CAD', year: '2023', tech: 'CAD, Blender', description: 'Precision modeling of pellet burners and surgical robots.' }
 ];
 
 const MoreProjects = () => {

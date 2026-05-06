@@ -24,16 +24,17 @@ const HackathonReflection = () => {
         flexWrap: 'wrap' // Stack on small screens
       }}>
         
-        {/* Left Side (40%) - The Narrative */}
+        {/* The Narrative */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.5, ease: "easeOut" }}
           style={{
-            flex: '0 0 40%',
-            minWidth: '320px',
-            textAlign: 'left'
+            flex: 1,
+            maxWidth: '800px',
+            margin: '0 auto',
+            textAlign: 'center'
           }}
         >
           <p style={{
@@ -56,8 +57,7 @@ const HackathonReflection = () => {
             marginBottom: '2.5rem',
             fontWeight: 300
           }}>
-            They are tiring. They are exhausting. I have fell medically ill after hackathons, 
-            the 48-hour sprints taking a physical toll I never expected.
+            Hackathons are demanding. The 48-hour sprints test your endurance and require sustained focus to meet strict deadlines.
           </p>
 
           <p style={{
@@ -67,11 +67,10 @@ const HackathonReflection = () => {
             lineHeight: 1.8,
             marginBottom: '3rem',
             fontWeight: 400,
-            maxWidth: '400px'
+            maxWidth: '600px',
+            margin: '0 auto 3rem auto'
           }}>
-            But beyond the caffeine and the pressure, they are where teams are forged. 
-            Demonstrating resilience under fire and building something that matters 
-            with your tribe—it’s a feeling unlike any other.
+            However, these constraints are excellent for rapid execution. They force you to communicate clearly, prioritize ruthlessly, and ship working code alongside capable teammates. You learn how to scope realistically and troubleshoot under pressure.
           </p>
 
           <p style={{
@@ -82,81 +81,8 @@ const HackathonReflection = () => {
             lineHeight: 1.4,
             fontWeight: 400
           }}>
-            Winning with your <span style={{ color: '#FFD601', fontStyle: 'normal', opacity: 0.7 }}>tribe</span> <br />
-            is the greatest feeling ever.
+            Taking first place is a great reward, but the lasting value is the ability to <span style={{ color: '#FFD601', fontStyle: 'normal', opacity: 0.7 }}>build and deliver</span> as a team when the clock is ticking.
           </p>
-        </motion.div>
-
-        {/* Right Side (60%) - Logo Placeholder Area */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 2, delay: 0.5 }}
-          style={{
-            flex: '1',
-            minWidth: '400px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-            gap: '24px',
-            alignContent: 'center',
-            padding: '20px',
-            borderLeft: '1px solid #111'
-          }}
-        >
-          {/* Logo Placeholders - Grey circles or rectangles */}
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div 
-              key={i} 
-              style={{
-                aspectRatio: '1/1',
-                width: '120px',
-                margin: '0 auto',
-                backgroundColor: '#0a0a0a',
-                border: '1px dashed #222',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              <span style={{ 
-                fontFamily: "'Inter', sans-serif", 
-                fontSize: '9px', 
-                color: '#222', 
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>
-                Hackathon <br /> Logo {i + 1}
-              </span>
-              {/* Subtle hover effect for the placeholder */}
-              <motion.div 
-                whileHover={{ opacity: 0.1 }}
-                initial={{ opacity: 0 }}
-                style={{ 
-                  position: 'absolute', 
-                  inset: 0, 
-                  background: '#FFD601',
-                  pointerEvents: 'none'
-                }} 
-              />
-            </div>
-          ))}
-          
-          <div style={{ gridColumn: '1 / -1', marginTop: '20px' }}>
-            <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: '8px',
-              color: '#222',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              textAlign: 'center'
-            }}>
-              // PLACE LOGOS OF YOUR HACKATHON VICTORIES HERE
-            </p>
-          </div>
         </motion.div>
 
       </div>

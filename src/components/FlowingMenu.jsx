@@ -54,7 +54,7 @@ function FlowingMenu({
         zIndex: 100
       }}>
         <AnimatePresence mode="wait">
-          {hoveredIdx !== null && (
+          {hoveredIdx !== null ? (
             <motion.div
               key={hoveredIdx} // Key ensures fresh animation for each item
               initial={{ opacity: 0, y: 10 }}
@@ -94,6 +94,36 @@ function FlowingMenu({
                 ) : (
                   items[hoveredIdx].description
                 )}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxSizing: "border-box",
+              }}
+            >
+              <div style={{
+                color: textColor,
+                opacity: 0.3,
+                fontSize: "12px",
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                fontFamily: "'Inter', sans-serif",
+                border: `1px dashed ${borderColor}`,
+                padding: "1rem 2rem",
+                borderRadius: "4px"
+              }}>
+                [ Hover over the modules to unpack details ]
               </div>
             </motion.div>
           )}

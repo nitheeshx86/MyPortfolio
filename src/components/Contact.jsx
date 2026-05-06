@@ -104,9 +104,7 @@ const Contact = () => {
         }}>
           {[
             { name: "LinkedIn", url: "#" },
-            { name: "GitHub", url: "#" },
-            { name: "Twitter", url: "#" },
-            { name: "Bento", url: "#" }
+            { name: "GitHub", url: "#" }
           ].map((social) => (
             <a 
               key={social.name} 

@@ -1,8 +1,72 @@
 import React from 'react';
+import bgVideo from '../assets/MEDxAI/BgVideo.mp4';
 
 const Projects = () => {
   return (
-    <div style={{ width: "100vw", flexShrink: 0, display: "flex", flexDirection: "column", justifyContent: "center", boxSizing: "border-box", height: "100%" }}>
+    <div style={{ 
+      width: "100vw", 
+      flexShrink: 0, 
+      display: "flex", 
+      flexDirection: "column", 
+      justifyContent: "center", 
+      boxSizing: "border-box", 
+      height: "100%",
+      position: "relative" // For absolute positioning of video
+    }}>
+      {/* Background Video Decoration (Smaller & Darker) */}
+      <div style={{
+        position: "absolute",
+        right: "5vw",
+        top: "50%",
+        transform: "translateY(-50%)",
+        width: "35vw",
+        height: "60vh",
+        overflow: "hidden",
+        zIndex: -1,
+        pointerEvents: "none",
+        opacity: 0.4, // Reduced for a darker, more subtle feel
+      }}>
+        <video 
+          src={bgVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+        {/* Deep, Seamless Vignette & Blend Overlay */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(circle, transparent 0%, rgba(0,0,0,1) 85%)",
+          zIndex: 1
+        }} />
+      </div>
+
+      {/* Video Caption (Humane & Visible) */}
+      <div style={{
+        position: "absolute",
+        right: "160px", // Pushed further left
+        top: "calc(50% + 30vh + 20px)",
+        width: "30vw",
+        maxWidth: "450px",
+        textAlign: "right",
+        fontSize: "15px",
+        fontFamily: "'Times New Roman', serif",
+        fontStyle: "italic",
+        color: "#FFF",
+        opacity: 0.6,
+        lineHeight: "1.6",
+        letterSpacing: "0.02em",
+        pointerEvents: "none"
+      }}>
+        In the seeming chaos of molecules colliding, chemistry reveals a quiet order—an unseen choreography where randomness becomes structure, and disorder gives rise to the elegance of life.
+      </div>
+
       {/* Label above heading */}
       <span style={{ fontSize: "12px", opacity: 0.5, textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "1rem" }}> [ Featured Experience ] </span>
 
