@@ -50,8 +50,8 @@ const Projects = () => {
       {/* Video Caption (Humane & Visible) */}
       <div style={{
         position: "absolute",
-        right: "160px", // Pushed further left
-        top: "calc(50% + 30vh + 20px)",
+        right: "320px", // Pushed even further left
+        top: "calc(50% + 30vh + 80px)",
         width: "30vw",
         maxWidth: "450px",
         textAlign: "right",

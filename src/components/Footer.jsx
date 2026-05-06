@@ -54,8 +54,19 @@ const Footer = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <span style={{ fontSize: '12px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.4)' }}>Social</span>
-            {['LinkedIn', 'GitHub'].map(link => (
-              <a key={link} href="#" style={{ color: '#000', textDecoration: 'none', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.02em' }}>{link}</a>
+            {[
+              { label: 'LinkedIn', url: 'https://www.linkedin.com/in/nitheeshx86/' },
+              { label: 'GitHub', url: 'https://github.com/nitheeshx86/' }
+            ].map(social => (
+              <a 
+                key={social.label} 
+                href={social.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: '#000', textDecoration: 'none', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.02em' }}
+              >
+                {social.label}
+              </a>
             ))}
           </div>
         </div>

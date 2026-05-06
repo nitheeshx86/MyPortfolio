@@ -27,7 +27,7 @@ function TraversingSpaceText({ text, speed = 50 }) {
   );
 }
 
-function TextGroup({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
+function TextGroup({ isMuted, setIsMuted, hasStarted, startPortfolio, onOpenResume }) {
   const groupRef = useRef();
   const titleRef = useRef();
   const subTopRef = useRef();
@@ -130,7 +130,15 @@ function TextGroup({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
       {/* Button fixed dynamically to the center bottom. Outside groupRef so it's static. */}
       {/* We position it beneath the last descriptive text line */}
       <Html position={[0, -titleSize * 1.6, 0]} center transform scale={0.32}>
-        <a href="#resume" className="resume-pill">Resume</a>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            onOpenResume();
+          }} 
+          className="resume-pill"
+        >
+          Resume
+        </button>
       </Html>
 
       {/* Static Paragraph Passage - Pushed further to the left edge and slightly higher */}
@@ -158,7 +166,7 @@ function TextGroup({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
   );
 }
 
-export default function ThreeLandingText({ isMuted, setIsMuted, hasStarted, startPortfolio }) {
+export default function ThreeLandingText({ isMuted, setIsMuted, hasStarted, startPortfolio, onOpenResume }) {
   return (
     <>
       <style>{`
@@ -183,6 +191,7 @@ export default function ThreeLandingText({ isMuted, setIsMuted, hasStarted, star
           background-color: #000;
           border-color: #000;
           color: #FFF;
+          outline: none;
         }
         .sound-toggle {
           background: transparent;
@@ -230,6 +239,7 @@ export default function ThreeLandingText({ isMuted, setIsMuted, hasStarted, star
             setIsMuted={setIsMuted} 
             hasStarted={hasStarted} 
             startPortfolio={startPortfolio} 
+            onOpenResume={onOpenResume}
           />
         </Canvas>
       </div>

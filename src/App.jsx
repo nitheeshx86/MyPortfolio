@@ -17,6 +17,8 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ScrollSimulator from './components/ScrollSimulator';
 import ConstructionPopup from './components/ConstructionPopup';
+import ResumePopup from './components/ResumePopup';
+import ContactPopup from './components/ContactPopup';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import './index.css';
 import pokemonMusic from './assets/pokemon.mp3';
@@ -34,11 +36,13 @@ export default function App() {
   const extraInfoAnchorRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMuted, setIsMuted] = useState(true);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(true);
   const [isLogoHovered, setIsLogoHovered] = useState(false);
   const audioRef = useRef(null);
   const deepDiveRef = useRef(null);
   const deepDiveEndRef = useRef(0);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
 
   const { scrollY } = useScroll();
 
@@ -175,8 +179,6 @@ export default function App() {
 
   return (
     <div style={{ color: '#FFF', position: 'relative' }}>
-      <ConstructionPopup />
-      {hasStarted && <Loader />}
       <BlobCursor />
       <audio
         ref={audioRef}
@@ -262,11 +264,17 @@ export default function App() {
           fontWeight: 600,
           pointerEvents: "auto",
         }}>
-          <a href="#github" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Github//</a>
-          <a href="#linkedin" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Linkedin//</a>
-          <a href="#projects" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Research]</a>
-          <a href="#details" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Details]</a>
-          <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Life]</a>
+          <a href="https://github.com/nitheeshx86/" target="_blank" rel="noopener noreferrer" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Github//</a>
+          <a href="https://www.linkedin.com/in/nitheeshx86/" target="_blank" rel="noopener noreferrer" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Linkedin//</a>
+          <a 
+            href="#contact" 
+            onClick={(e) => { e.preventDefault(); setIsContactOpen(true); }}
+            style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none", cursor: 'pointer' }}
+          >
+            [Contact]
+          </a>
+          <a href="#details" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Photography]</a>
+          <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Side-Quests]</a>
         </nav>
       </div>
 
@@ -335,6 +343,7 @@ export default function App() {
                   setIsMuted={setIsMuted}
                   hasStarted={hasStarted}
                   startPortfolio={startPortfolio}
+                  onOpenResume={() => setIsResumeOpen(true)}
                 />
                 <Lightning isAudioOn={!isMuted && hasStarted} />
 
@@ -566,7 +575,7 @@ export default function App() {
                 Now, to my&nbsp;<em>Favourite Part.</em>
               </div>
               {/* Right panel — Personal Projects */}
-              <div style={{ width: "100vw", flexShrink: 0, height: "100%", overflowY: "auto", display: "flex", alignItems: "center" }}>
+              <div style={{ width: "100vw", flexShrink: 0, height: "100%", overflowY: "hidden", display: "flex", alignItems: "center" }}>
                 <PersonalProjects />
               </div>
             </div>
@@ -634,7 +643,7 @@ export default function App() {
                 </div>
               </div>
               {/* Right panel — Hackathons */}
-              <div style={{ width: '100vw', flexShrink: 0, height: '100%', overflowY: 'auto', display: 'flex', alignItems: 'center' }}>
+              <div style={{ width: '100vw', flexShrink: 0, height: '100%', overflowY: 'hidden', display: 'flex', alignItems: 'center' }}>
                 <Hackathons />
               </div>
             </div>
@@ -723,6 +732,10 @@ export default function App() {
       </div>
 
       <Footer />
+      <ConstructionPopup />
+      <ResumePopup isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
+      <ContactPopup isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <Loader />
     </div>
   );
 }

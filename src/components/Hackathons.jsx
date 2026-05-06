@@ -899,7 +899,7 @@ const Hackathons = () => {
             linear-gradient(160deg, ${BODY2} 0%, ${BODY} 60%)
           `,
           borderRadius: '28px 28px 32px 32px',
-          padding: '24px 32px 32px',
+          padding: '24px 32px 12px',
           boxSizing: 'border-box',
           boxShadow: `0 0 0 3px #0a0900, 0 0 0 5px #333, 0 12px 50px rgba(0,0,0,0.8), 0 0 60px ${Y}18`,
           display: 'flex',
@@ -1174,7 +1174,7 @@ const Hackathons = () => {
         </div>
 
         {/* ── BOTTOM ROW: speaker | START/SELECT | speaker ── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4, paddingBottom: 8, paddingLeft: 48, paddingRight: 48 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4, paddingBottom: 0, paddingLeft: 48, paddingRight: 48 }}>
           {/* left speaker */}
           <Speaker side="left" />
 

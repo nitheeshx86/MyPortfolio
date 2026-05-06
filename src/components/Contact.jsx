@@ -103,12 +103,14 @@ const Contact = () => {
           flexWrap: "wrap"
         }}>
           {[
-            { name: "LinkedIn", url: "#" },
-            { name: "GitHub", url: "#" }
+            { name: "LinkedIn", url: "https://www.linkedin.com/in/nitheeshx86/" },
+            { name: "GitHub", url: "https://github.com/nitheeshx86/" }
           ].map((social) => (
             <a 
               key={social.name} 
               href={social.url} 
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 fontSize: "14px",
                 fontWeight: 600,
