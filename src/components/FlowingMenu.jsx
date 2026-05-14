@@ -233,14 +233,14 @@ function MenuItem({
         borderTop: isFirst ? 'none' : `1px solid ${borderColor}` 
       }}
     >
-      <a
+      <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-start",
           height: "100%",
           position: "relative",
-          cursor: "pointer",
+          cursor: "default",
           textTransform: "uppercase",
           textDecoration: "none",
           fontWeight: 900,
@@ -250,12 +250,11 @@ function MenuItem({
           letterSpacing: "-0.01em",
           paddingLeft: "2rem"
         }}
-        href={link}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {text}
-      </a>
+      </div>
       <div
         ref={marqueeRef}
         style={{ 

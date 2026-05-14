@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ScrollSimulator = ({ scrollY, sections }) => {
+const ScrollSimulator = ({ scrollY, sections, pageProgress }) => {
   // Determine current section
   const currentSectionIdx = sections.findIndex(s => scrollY >= s.start && scrollY < s.end);
   const currentSection = sections[currentSectionIdx];
@@ -37,9 +37,9 @@ const ScrollSimulator = ({ scrollY, sections }) => {
         style={{
           width: '2px', // Slightly thicker for active
           marginLeft: '-0.5px', // Center on the 1px line
-          backgroundColor: isAdditional ? 'rgba(255,255,255,0.3)' : 'rgb(255, 214, 1)',
+          backgroundColor: pageProgress > 98 ? '#FFF' : (isAdditional ? 'rgba(255,255,255,0.3)' : 'rgb(255, 214, 1)'),
           transformOrigin: 'top',
-          boxShadow: isAdditional ? 'none' : '0 0 10px rgba(255, 214, 1, 0.5)'
+          boxShadow: pageProgress > 98 ? '0 0 10px rgba(255, 255, 255, 0.5)' : (isAdditional ? 'none' : '0 0 10px rgba(255, 214, 1, 0.5)')
         }}
       />
 
@@ -76,10 +76,10 @@ const ScrollSimulator = ({ scrollY, sections }) => {
             fontSize: '9px',
             textTransform: 'uppercase',
             letterSpacing: '0.2em',
-            color: isAdditional ? 'rgba(255,255,255,0.4)' : 'rgb(255, 214, 1)',
+            color: pageProgress > 98 ? '#FFF' : (isAdditional ? 'rgba(255,255,255,0.4)' : 'rgb(255, 214, 1)'),
             fontWeight: 900
           }}>
-            {isAdditional ? '[ ADDITIONAL DETAILS ]' : (currentSection ? `[ ${currentSection.name} ]` : '')}
+            {pageProgress > 98 ? '[ FOOTER REVEAL ]' : (isAdditional ? '[ ADDITIONAL DETAILS ]' : (currentSection ? `[ ${currentSection.name} ]` : ''))}
           </span>
           <span style={{
             fontFamily: "'Courier New', Courier, monospace",
@@ -107,6 +107,40 @@ const ScrollSimulator = ({ scrollY, sections }) => {
           }} />
         );
       })}
+
+      {/* Global Page Progress Percentage at bottom of line */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-55px',
+        left: '0',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        opacity: isActive || isAdditional ? 1 : 0,
+        transition: 'opacity 0.4s ease'
+      }}>
+        <div style={{
+          fontFamily: "'Courier New', Courier, monospace",
+          fontSize: '14px',
+          fontWeight: 900,
+          color: pageProgress > 98 ? '#FFF' : (isAdditional ? 'rgba(255,255,255,0.8)' : 'rgb(255, 214, 1)'),
+          textShadow: pageProgress > 98 ? '0 0 10px rgba(255, 255, 255, 0.4)' : (isAdditional ? 'none' : '0 0 10px rgba(255, 214, 1, 0.4)')
+        }}>
+          {Math.round(pageProgress).toString().padStart(2, '0')}%
+        </div>
+        <div style={{
+          fontFamily: "'Courier New', Courier, monospace",
+          fontSize: '7px',
+          color: '#FFF',
+          opacity: 0.3,
+          textTransform: 'uppercase',
+          letterSpacing: '0.2em',
+          marginTop: '3px'
+        }}>
+          SCROLLED
+        </div>
+      </div>
     </motion.div>
   );
 };

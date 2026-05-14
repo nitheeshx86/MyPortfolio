@@ -357,3 +357,67 @@ header.scrolled {
   animation: marquee 20s linear infinite;
   /* Double the content length in JS/App.jsx and scroll half of it */
 }
+
+/* Intro Overlay Keyframes */
+@keyframes intro-iris {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+    filter: brightness(3) blur(40px);
+  }
+  40% {
+    clip-path: circle(8% at 50% 50%);
+    filter: brightness(2.4) blur(20px);
+  }
+  100% {
+    clip-path: circle(150% at 50% 50%);
+    filter: brightness(1) blur(0);
+  }
+}
+
+@keyframes intro-glow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(20);
+  }
+}
+
+@keyframes intro-fade {
+  0%, 70% {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+/* Helper Classes */
+.animate-intro-glow {
+  animation: intro-glow 1.8s cubic-bezier(0.6, 0, 0.4, 1) both;
+}
+
+.animate-intro-fade {
+  animation: intro-fade 2.4s ease-out both;
+}
+
+.curved-marquee {
+  color: #1a1a1a;
+  opacity: 1;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}

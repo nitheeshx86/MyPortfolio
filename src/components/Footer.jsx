@@ -11,7 +11,7 @@ const Footer = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      padding: '160px clamp(20px, 8vw, 150px) 100px',
+      padding: '200px clamp(20px, 8vw, 150px) 100px',
       boxSizing: 'border-box',
       position: 'fixed',
       bottom: 0,

@@ -5,7 +5,6 @@ import teamImg from '../assets/MEDxAI/team.jpeg';
 const DeepDive = () => {
   const menuItems = [
     {
-      link: "#",
       text: "Technical Skills",
       image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
       description: [
@@ -16,7 +15,6 @@ const DeepDive = () => {
       ]
     },
     {
-      link: "#",
       text: "Soft Skills",
       image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
       description: [
@@ -28,7 +26,6 @@ const DeepDive = () => {
       ]
     },
     {
-      link: "#",
       text: "Research Interests",
       image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
       description: [
@@ -40,7 +37,6 @@ const DeepDive = () => {
       ]
     },
     {
-      link: "#",
       text: "Measurable Outcomes",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
       description: [

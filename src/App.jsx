@@ -19,6 +19,7 @@ import ScrollSimulator from './components/ScrollSimulator';
 import ConstructionPopup from './components/ConstructionPopup';
 import ResumePopup from './components/ResumePopup';
 import ContactPopup from './components/ContactPopup';
+import SideQuests from './components/SideQuests';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import './index.css';
 import pokemonMusic from './assets/pokemon.mp3';
@@ -43,6 +44,8 @@ export default function App() {
   const deepDiveEndRef = useRef(0);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isSideQuestsOpen, setIsSideQuestsOpen] = useState(false);
+  const [totalPageProgress, setTotalPageProgress] = useState(0);
 
   const { scrollY } = useScroll();
 
@@ -72,7 +75,7 @@ export default function App() {
     sections.push({ name: "HACKATHON ARC", start: hackStart, end: hackEnd });
 
     // 4. Recognitions & Academy
-    const endPoint = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop + 4800 : awardsEnd + 4800;
+    const endPoint = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop + 4800 : 0;
     sections.push({ name: "ACADEMIC ARC", start: hackEnd, end: endPoint });
 
     setSectionBounds(sections);
@@ -145,6 +148,11 @@ export default function App() {
       const eStart = extraInfoAnchorRef.current ? extraInfoAnchorRef.current.offsetTop : 0;
       const ehp = eStart ? Math.max(0, Math.min((window.scrollY - eStart) / 4800, 1)) : 0;
       setExtraHorizProgress(ehp);
+
+      // 7. Total Page Progress
+      const totalH = document.documentElement.scrollHeight - window.innerHeight;
+      const pg = totalH > 0 ? (window.scrollY / totalH) * 100 : 0;
+      setTotalPageProgress(pg);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -170,11 +178,7 @@ export default function App() {
     });
   };
 
-  // Ultra-DRAMATIC Profound Curve Morphing:
-  // Expanding viewBox and height for a massive, profound curve immersion effect
-  // Initial (p=0): Path has a massive weighted curve.
-  // Final (p=1): Path flattens completely.
-  const curveControlY = 500 - (scrollProgress * 400); // from 500 down to 100
+  const curveControlY = 500 - (scrollProgress * 400);
   const path = `M 0,0 L 100,0 L 100,100 Q 50,${curveControlY} 0,100 Z`;
 
   return (
@@ -188,7 +192,6 @@ export default function App() {
         style={{ display: 'none' }}
       />
 
-      {/* Sharp Viewport Border */}
       <div style={{
         position: 'fixed',
         inset: 0,
@@ -197,7 +200,6 @@ export default function App() {
         zIndex: 1000,
       }} />
 
-      {/* N. Logo and Nav (Fixed over everything) */}
       <div style={{
         position: "fixed",
         top: 0, left: 0, right: 0,
@@ -213,7 +215,7 @@ export default function App() {
             left: "32px",
             margin: 0,
             fontWeight: 900,
-            color: scrollProgress < 0.9 ? "#000" : "#FFF",
+            color: scrollProgress < 0.9 || isSideQuestsOpen ? "#000" : "#FFF",
             fontSize: "42px",
             letterSpacing: "-0.03em",
             textTransform: "uppercase",
@@ -264,38 +266,44 @@ export default function App() {
           fontWeight: 600,
           pointerEvents: "auto",
         }}>
-          <a href="https://github.com/nitheeshx86/" target="_blank" rel="noopener noreferrer" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Github//</a>
-          <a href="https://www.linkedin.com/in/nitheeshx86/" target="_blank" rel="noopener noreferrer" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>Linkedin//</a>
+          <a href="https://github.com/nitheeshx86/" target="_blank" rel="noopener noreferrer" style={{ color: scrollProgress < 0.9 || isSideQuestsOpen ? "#000" : "#FFF", textDecoration: "none" }}>Github//</a>
+          <a href="https://www.linkedin.com/in/nitheeshx86/" target="_blank" rel="noopener noreferrer" style={{ color: scrollProgress < 0.9 || isSideQuestsOpen ? "#000" : "#FFF", textDecoration: "none" }}>Linkedin//</a>
           <a 
             href="#contact" 
             onClick={(e) => { e.preventDefault(); setIsContactOpen(true); }}
-            style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none", cursor: 'pointer' }}
+            style={{ color: scrollProgress < 0.9 || isSideQuestsOpen ? "#000" : "#FFF", textDecoration: "none", cursor: 'pointer' }}
           >
             [Contact]
           </a>
-          <a href="#details" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Photography]</a>
-          <a href="#photography" style={{ color: scrollProgress < 0.9 ? "#000" : "#FFF", textDecoration: "none" }}>[Side-Quests]</a>
+          <a href="#details" style={{ color: scrollProgress < 0.9 || isSideQuestsOpen ? "#000" : "#FFF", textDecoration: "none" }}>[Photography]</a>
+          <a 
+            href={isSideQuestsOpen ? "#" : "#side-quests"} 
+            onClick={(e) => { 
+              e.preventDefault(); 
+              setIsSideQuestsOpen(!isSideQuestsOpen); 
+            }}
+            style={{ color: scrollProgress < 0.9 || isSideQuestsOpen ? "#000" : "#FFF", textDecoration: "none" }}
+          >
+            [{isSideQuestsOpen ? "Main-Quest" : "Side-Quests"}]
+          </a>
         </nav>
       </div>
 
-      {/* Main Container */}
       <div style={{ 
         width: "100%", 
         position: "relative", 
         cursor: "none", 
         backgroundColor: "#000",
-        marginBottom: '800px', // Match footer height for reveal
-        zIndex: 10
+        marginBottom: '640px',
+        zIndex: 10,
+        display: isSideQuestsOpen ? 'none' : 'block'
       }}>
-        <ScrollSimulator scrollY={currentY} sections={sectionBounds} />
+        <ScrollSimulator scrollY={currentY} sections={sectionBounds} pageProgress={totalPageProgress} />
 
-        {/* STICKY ORCHESTRATION SEGMENT (Landing -> Horizontal Transition) */}
         <div style={{ height: "5800px", position: "relative", zIndex: 10 }}>
 
-          {/* STICKY VIEWPORT WRAPPER */}
           <div style={{ position: "sticky", top: 0, left: 0, width: "100%", height: "100vh", overflow: "hidden" }}>
 
-            {/* LANDING SECTION (STICKY Child) */}
             <div style={{
               position: "absolute",
               top: 0,
@@ -306,14 +314,12 @@ export default function App() {
               transform: `translateY(-${scrollProgress * 120}vh)`,
               overflow: "visible"
             }}>
-              {/* Yellow Background Wrapper */}
               <div style={{
                 position: "absolute",
                 inset: 0,
                 background: "rgb(255, 214, 1)",
               }} />
 
-              {/* Morphing Curve Bottom divider */}
               <svg
                 viewBox="0 0 100 500"
                 preserveAspectRatio="none"
@@ -331,107 +337,109 @@ export default function App() {
                 <path d={path} />
               </svg>
 
-              {/* Landing Content Container */}
               <div style={{
                 position: "relative",
                 height: "100%",
                 width: "100%",
                 zIndex: 13
               }}>
-                <ThreeLandingText
-                  isMuted={isMuted}
-                  setIsMuted={setIsMuted}
-                  hasStarted={hasStarted}
-                  startPortfolio={startPortfolio}
-                  onOpenResume={() => setIsResumeOpen(true)}
-                />
-                <Lightning isAudioOn={!isMuted && hasStarted} />
+                {!isSideQuestsOpen && (
+                  <>
+                    <ThreeLandingText
+                      isMuted={isMuted}
+                      setIsMuted={setIsMuted}
+                      hasStarted={hasStarted}
+                      startPortfolio={startPortfolio}
+                      onOpenResume={() => setIsResumeOpen(true)}
+                    />
+                    <Lightning isAudioOn={!isMuted && hasStarted} />
+                  </>
+                )}
 
-                {/* --- SUMMER RESEARCH UPDATE (Sticker with Peel Effect) --- */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
-                  animate={{ opacity: 1, scale: 1, rotate: -45 }}
-                  transition={{ 
-                    delay: 1.8, 
-                    duration: 1.2, 
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 12
-                  }}
-                  whileHover={{ scale: 1.1, rotate: -40, filter: "brightness(1.1)" }}
-                  style={{
-                    position: "absolute",
-                    top: "25%",
-                    left: "10%",
-                    zIndex: 100,
-                    cursor: "pointer",
-                    pointerEvents: "auto",
-                  }}
-                >
-                  <div style={{
-                    position: "relative",
-                    backgroundColor: "#000",
-                    color: "rgb(255, 214, 1)",
-                    padding: "16px 32px",
-                    fontFamily: "'Arial Black', sans-serif",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    border: "4px solid #FFF",
-                    borderRadius: "2px",
-                    boxShadow: "0 25px 50px rgba(0,0,0,0.4)",
-                    overflow: "hidden" 
-                  }}>
-                    {/* Peel Fold Effect */}
-                    <div style={{
+                {!isSideQuestsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                    animate={{ opacity: 1, scale: 1, rotate: -45 }}
+                    transition={{ 
+                      delay: 1.8, 
+                      duration: 1.2, 
+                      type: "spring",
+                      stiffness: 120,
+                      damping: 12
+                    }}
+                    whileHover={{ scale: 1.1, rotate: -40, filter: "brightness(1.1)" }}
+                    style={{
                       position: "absolute",
-                      bottom: "-1px",
-                      right: "-1px",
-                      width: "40px",
-                      height: "40px",
-                      background: "linear-gradient(135deg, transparent 50%, #FFF 50%)",
-                      zIndex: 5,
-                      boxShadow: "-5px -5px 15px rgba(0,0,0,0.5)"
-                    }} />
-                    
-                    <span style={{ 
-                      fontSize: "10px", 
-                      color: "#FFF",
-                      opacity: 0.9, 
-                      marginBottom: "6px",
-                      letterSpacing: "0.3em",
-                      fontWeight: 900,
-                      display: "block"
-                    }}>
-                      [ UPDATE // 2026 ]
-                    </span>
+                      top: "25%",
+                      left: "10%",
+                      zIndex: 100,
+                      cursor: "pointer",
+                      pointerEvents: "auto",
+                    }}
+                  >
                     <div style={{
-                      fontSize: "22px",
-                      lineHeight: 0.95,
-                      letterSpacing: "-0.04em",
-                      fontWeight: 1000,
+                      position: "relative",
+                      backgroundColor: "#000",
                       color: "rgb(255, 214, 1)",
-                      whiteSpace: "nowrap",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "6px"
+                      padding: "16px 32px",
+                      fontFamily: "'Arial Black', sans-serif",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      border: "4px solid #FFF",
+                      borderRadius: "2px",
+                      boxShadow: "0 25px 50px rgba(0,0,0,0.4)",
+                      overflow: "hidden" 
                     }}>
-                      Summer Research
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <span style={{ color: "#FFF" }}>@</span>
-                        <img 
-                          src={samsungLogo} 
-                          alt="Samsung" 
-                          style={{ 
-                            height: "30px", // Slightly larger for clarity
-                            width: "auto"
-                          }} 
-                        />
+                      <div style={{
+                        position: "absolute",
+                        bottom: "-1px",
+                        right: "-1px",
+                        width: "40px",
+                        height: "40px",
+                        background: "linear-gradient(135deg, transparent 50%, #FFF 50%)",
+                        zIndex: 5,
+                        boxShadow: "-5px -5px 15px rgba(0,0,0,0.5)"
+                      }} />
+                      
+                      <span style={{ 
+                        fontSize: "10px", 
+                        color: "#FFF",
+                        opacity: 0.9, 
+                        marginBottom: "6px",
+                        letterSpacing: "0.3em",
+                        fontWeight: 900,
+                        display: "block"
+                      }}>
+                        [ UPDATE // 2026 ]
+                      </span>
+                      <div style={{
+                        fontSize: "22px",
+                        lineHeight: 0.95,
+                        letterSpacing: "-0.04em",
+                        fontWeight: 1000,
+                        color: "rgb(255, 214, 1)",
+                        whiteSpace: "nowrap",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "6px"
+                      }}>
+                        Summer Research
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <span style={{ color: "#FFF" }}>@</span>
+                          <img 
+                            src={samsungLogo} 
+                            alt="Samsung" 
+                            style={{ 
+                              height: "30px",
+                              width: "auto"
+                            }} 
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                )}
 
-                {/* Clock at bottom left */}
                 <div style={{
                   position: "absolute",
                   bottom: "32px",
@@ -445,7 +453,6 @@ export default function App() {
                 }}>
                   Chennai [Madras] {formatIST(currentTime)} IST
                 </div>
-                {/* Loop Scroll Hint between elements */}
                 <div className="marquee-container" style={{
                   position: "absolute",
                   bottom: "32px",
@@ -465,7 +472,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Portfolio indicator at bottom right - Pikachu is the trigger */}
                 <div style={{
                   position: "absolute",
                   bottom: "32px",
@@ -508,7 +514,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* HORIZONTAL SECTION — slides up from below as landing flies off */}
             <div style={{
               position: "absolute",
               inset: 0,
@@ -519,7 +524,6 @@ export default function App() {
               transform: `translateY(${(1 - scrollProgress) * 100}vh)`,
               transition: "transform 0.05s linear"
             }}>
-              {/* Horizontal Slider Content */}
               <div style={{
                 display: "flex",
                 height: "100%",
@@ -537,12 +541,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* 2. Deep Dive — normal vertical section */}
         <div ref={deepDiveRef}>
           <DeepDive />
         </div>
 
-        {/* 3. Projects — sticky horizontal scroll (slides in after DeepDive) */}
         <div style={{ height: "3200px", position: "relative" }}>
           <div style={{
             position: "sticky",
@@ -558,7 +560,6 @@ export default function App() {
               transform: `translateX(-${deepDiveHorizProgress * 100}vw)`,
               transition: "transform 0.08s ease-out"
             }}>
-              {/* Left placeholder — mirrors the end of DeepDive for continuity */}
               <div style={{
                 width: "100vw",
                 flexShrink: 0,
@@ -574,7 +575,6 @@ export default function App() {
               }}>
                 Now, to my&nbsp;<em>Favourite Part.</em>
               </div>
-              {/* Right panel — Personal Projects */}
               <div style={{ width: "100vw", flexShrink: 0, height: "100%", overflowY: "hidden", display: "flex", alignItems: "center" }}>
                 <PersonalProjects />
               </div>
@@ -585,7 +585,6 @@ export default function App() {
         <Photography />
         <MoreProjects />
 
-        {/* Hackathons horizontal scroll anchor */}
         <div ref={hackathonsAnchorRef} style={{ height: '4200px', position: 'relative' }}>
           <div style={{
             position: 'sticky',
@@ -601,7 +600,6 @@ export default function App() {
               transform: `translateX(-${hackathonsHorizProgress * 100}vw)`,
               transition: 'transform 0.08s ease-out',
             }}>
-              {/* Left placeholder — GBA boot screen */}
               <div style={{
                 width: '100vw',
                 flexShrink: 0,
@@ -615,7 +613,6 @@ export default function App() {
                 position: 'relative',
                 overflow: 'hidden',
               }}>
-                {/* scanlines */}
                 <div style={{
                   position: 'absolute', inset: 0, pointerEvents: 'none',
                   backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px)',
@@ -642,7 +639,6 @@ export default function App() {
                   ▶▶ SCROLL TO CONTINUE
                 </div>
               </div>
-              {/* Right panel — Hackathons */}
               <div style={{ width: '100vw', flexShrink: 0, height: '100%', overflowY: 'hidden', display: 'flex', alignItems: 'center' }}>
                 <Hackathons />
               </div>
@@ -654,7 +650,6 @@ export default function App() {
           <HackathonReflection />
         </div>
 
-        {/* Label for Additional Specific Details */}
         <div style={{
           padding: '100px 0 20px',
           textAlign: 'center',
@@ -673,7 +668,6 @@ export default function App() {
           </span>
         </div>
 
-        {/* ── AWARDS SECTION ── */}
         <div ref={awardsAnchorRef} style={{ height: '400vh', position: 'relative' }}>
           <div style={{
             position: 'sticky',
@@ -731,11 +725,17 @@ export default function App() {
 
       </div>
 
-      <Footer />
+      {!isSideQuestsOpen && <Footer />}
       <ConstructionPopup />
       <ResumePopup isOpen={isResumeOpen} onClose={() => setIsResumeOpen(false)} />
       <ContactPopup isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       <Loader />
+      
+      <AnimatePresence>
+        {isSideQuestsOpen && (
+          <SideQuests onClose={() => setIsSideQuestsOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -27,20 +27,21 @@ const projects = [
     longDescription: "Detailed case study for LithoMap coming soon."
   },
   {
-    name: "LLM Tensorization using TT-Decomposition",
+    name: "Large-Scale AI System Optimization",
     tag: "Samsung Research",
-    description: "Multi-Core Tensorization of Large Language Models",
-    detail: "Design and Implementation of Multi-Core Tensor Train Decomposition Algorithms for Optimal Tensorization of Large Language Models (LLMs). Developed at Samsung Research to push the boundaries of on-device AI efficiency.",
+    description: "Efficient Inference & Compute-Aware Deployment",
+    detail: "Worked on confidential research initiatives related to large-scale AI system optimization, efficient inference workflows, and compute-aware deployment strategies for next-generation intelligent systems.",
     logo: samsungLogo,
     logoHeight: "30px",
     overview: [
-      "Architected and implemented high-performance multi-core algorithms for Tensor Train (TT) decomposition to optimize LLM parameter storage.",
-      "Developed parallelized tensorization workflows, significantly reducing memory footprint and computational latency for large-scale models.",
-      "Engineered automated rank-selection heuristics to balance decomposition efficiency with model inference accuracy.",
-      "Integrated tensor-based compression techniques into Samsung's proprietary AI acceleration frameworks."
+      "Worked on performance optimization workflows for large AI systems.",
+      "Contributed to scalable multi-core compute and acceleration strategies.",
+      "Assisted in experimentation, benchmarking, and efficiency-focused research pipelines.",
+      "Collaborated on internal tooling and deployment-oriented optimization efforts.",
+      "Participated in research targeting efficient on-device and resource-aware AI execution."
     ],
-    note: "This research focused on making massive models run on modest hardware—because even the smartest AI shouldn't require a power plant to think. Proud to have contributed to the next generation of efficient, on-device intelligence.",
-    longDescription: "Detailed research paper and implementation details for Samsung LLM Tensorization coming soon."
+    note: "Due to the proprietary nature of the work, specific architectures, methodologies, and implementation details cannot be publicly disclosed.",
+    longDescription: "Focused on improving the scalability and practicality of advanced AI systems under real-world hardware constraints."
   },
   {
     name: "Financial Fraud Detection using QFL",
@@ -418,6 +419,8 @@ const Photography = () => {
   const rafRef = useRef(null);
   const pausedRef = useRef(false);
   const progressRef = useRef(0); // mirror of progress for rAF closure
+  const [isInView, setIsInView] = useState(false);
+  const containerRef = useRef(null);
 
   const goNext = useCallback(() => {
     setDirection(1);
@@ -467,15 +470,33 @@ const Photography = () => {
     return () => cancelAnimationFrame(rafRef.current);
   }, [current, startLoop]);
 
-  // Pause loop while modal is open OR user manually paused
+  // Pause loop while modal is open OR user manually paused OR not in view
   useEffect(() => {
-    pausedRef.current = !!modalProject || isPaused;
-  }, [modalProject, isPaused]);
+    pausedRef.current = !!modalProject || isPaused || !isInView;
+  }, [modalProject, isPaused, isInView]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const togglePause = () => setIsPaused(p => !p);
 
   return (
-    <div id="projects-showcase" style={{
+    <div 
+      id="projects-showcase" 
+      ref={containerRef}
+      style={{
       padding: "clamp(60px, 12vw, 160px)",
       backgroundColor: "#000",
       position: "relative",
